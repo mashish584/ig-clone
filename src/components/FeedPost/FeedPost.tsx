@@ -4,9 +4,11 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
+
 import styles, {colors} from './styles';
 
 import Comment from '../Comment';
+import VideoPlayer from '../VideoPlayer/VideoPlayer';
 import {IPost} from '../../types/model';
 
 import DoublePress from '../DoublePressable';
@@ -14,10 +16,11 @@ import Carousel from '../Carousel';
 
 interface IFeedPost {
   post: IPost;
+  isVisible: boolean;
 }
 
 const FeedPost = (props: IFeedPost) => {
-  const {post} = props;
+  const {post, isVisible} = props;
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [isPostLiked, setIsPostLiked] = useState(false);
@@ -45,6 +48,12 @@ const FeedPost = (props: IFeedPost) => {
     );
   } else if (post.images) {
     content = <Carousel images={post.images} onDoublePress={togglePostLike} />;
+  } else if (post.video) {
+    content = (
+      <DoublePress onDoublePress={togglePostLike}>
+        <VideoPlayer uri={post.video} paused={!isVisible} />
+      </DoublePress>
+    );
   }
 
   return (
