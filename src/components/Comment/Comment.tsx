@@ -1,27 +1,49 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, Image, Pressable} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {IComment} from '../../types/model';
 import styles, {colors} from './styles';
 
 interface ICommentProps {
   comment: IComment;
+  includeDetails?: boolean;
 }
 
 const Comment = (props: ICommentProps) => {
-  const {comment} = props;
+  const {comment, includeDetails} = props;
+
+  const [isCommentLiked, setIsCommentLiked] = useState(false);
+
+  function toggleLike() {
+    setIsCommentLiked(!isCommentLiked);
+  }
+
   return (
-    <View key={comment.id} style={styles.comment}>
-      <Text style={styles.commentText}>
-        <Text style={styles.bold}>{comment.user.username}</Text>{' '}
-        {comment.comment}
-      </Text>
-      <AntDesign
-        name={'hearto'}
-        size={16}
-        style={styles.icon}
-        color={colors.black}
-      />
+    <View style={styles.comment}>
+      {includeDetails && (
+        <Image source={{uri: comment.user.image}} style={styles.avatar} />
+      )}
+      <View style={styles.middleColumn}>
+        <Text style={styles.commentText}>
+          <Text style={styles.bold}>{comment.user.username}</Text>{' '}
+          {comment.comment}
+        </Text>
+        {includeDetails && (
+          <View style={styles.commentFooter}>
+            <Text style={styles.footerText}>3d</Text>
+            <Text style={styles.footerText}>5 likes</Text>
+            <Text style={styles.footerText}>Reply</Text>
+          </View>
+        )}
+      </View>
+      <Pressable onPress={toggleLike} hitSlop={5}>
+        <AntDesign
+          name={isCommentLiked ? 'heart' : 'hearto'}
+          size={16}
+          style={styles.icon}
+          color={isCommentLiked ? colors.accent : colors.black}
+        />
+      </Pressable>
     </View>
   );
 };

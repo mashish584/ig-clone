@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
   },
   commentText: {
     color: colors.black,
-    flex: 1,
     lineHeight: 18,
   },
   bold: {
@@ -17,6 +16,23 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginHorizontal: 5,
+  },
+  avatar: {
+    width: 40,
+    aspectRatio: 1,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  middleColumn: {
+    flex: 1,
+  },
+  commentFooter: {
+    flexDirection: 'row',
+    marginBottom: 10,
+    marginTop: 5,
+  },
+  footerText: {
+    marginRight: 5,
   },
 });
 
