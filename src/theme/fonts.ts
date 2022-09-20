@@ -1,3 +1,5 @@
+import {TextStyle} from 'react-native';
+
 const size = {
   xs: 10,
   s: 12,
@@ -8,7 +10,9 @@ const size = {
   xxlg: 30,
 };
 
-const weight = {
+type weighKey = 'full' | 'semi' | 'bold' | 'normal' | 'thin';
+
+const weight: Record<weighKey, TextStyle['fontWeight']> = {
   full: '900',
   semi: '600',
   bold: 'bold',
