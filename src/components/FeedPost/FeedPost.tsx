@@ -4,15 +4,17 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
+import {useNavigation} from '@react-navigation/native';
 
 import styles, {colors} from './styles';
 
 import Comment from '../Comment';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
-import {IPost} from '../../types/model';
-
 import DoublePress from '../DoublePressable';
 import Carousel from '../Carousel';
+
+import {IPost} from '../../types/model';
+import {FeedNavigationProp} from '../../navigation/types';
 
 interface IFeedPost {
   post: IPost;
@@ -20,6 +22,7 @@ interface IFeedPost {
 }
 
 const FeedPost = (props: IFeedPost) => {
+  const navigation = useNavigation<FeedNavigationProp>();
   const {post, isVisible} = props;
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
@@ -31,6 +34,14 @@ const FeedPost = (props: IFeedPost) => {
 
   function togglePostLike() {
     setIsPostLiked(!isPostLiked);
+  }
+
+  function showUserProfile() {
+    navigation.navigate('UserProfile', {userId: post.user.id});
+  }
+
+  function navigateToComments() {
+    navigation.navigate('Comments', {postId: post.id});
   }
 
   let content = null;
@@ -66,7 +77,9 @@ const FeedPost = (props: IFeedPost) => {
           }}
           style={styles.userAvatar}
         />
-        <Text style={styles.userName}>{post.user.username}</Text>
+        <Text onPress={showUserProfile} style={styles.userName}>
+          {post.user.username}
+        </Text>
         <Entypo
           name="dots-three-horizontal"
           size={16}
@@ -120,7 +133,9 @@ const FeedPost = (props: IFeedPost) => {
           Show {isDescriptionExpanded ? 'less' : 'more'}
         </Text>
         {/* Post comments */}
-        <Text>View all {post.nofComments} comments</Text>
+        <Text onPress={navigateToComments}>
+          View all {post.nofComments} comments
+        </Text>
         {post.comments.map(comment => {
           return <Comment key={comment.id} comment={comment} />;
         })}
