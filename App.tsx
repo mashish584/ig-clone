@@ -1,10 +1,10 @@
-// import HomeScreen from './src/screens/HomScreen';
-// import CommentsScreen from './src/screens/CommentsScreen';
-// import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen';
-// import EditProfileScreen from './src/screens/EditProfileScreen/EditProfileScreen';
-// import PostUploadScreen from './src/screens/PostUploadScreen';
+import {Amplify} from 'aws-amplify';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+
 import Navigation from './src/navigation';
+import awsconfig from './src/aws-exports';
+
+Amplify.configure(awsconfig);
 
 const App = () => {
   return (
