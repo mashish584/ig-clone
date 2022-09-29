@@ -4,7 +4,9 @@ import {
   StyleSheet,
   useWindowDimensions,
   ScrollView,
+  Alert,
 } from 'react-native';
+import {Auth} from 'aws-amplify';
 
 import FormInput from '../components/FormInput';
 import CustomButton from '../components/CustomButton';
@@ -12,6 +14,7 @@ import SocialSignInButtons from '../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 import {SignInNavigationProp} from '../../../types/navigation';
+import {useState} from 'react';
 
 type SignInData = {
   username: string;
@@ -21,13 +24,27 @@ type SignInData = {
 const SignInScreen = () => {
   const {height} = useWindowDimensions();
   const navigation = useNavigation<SignInNavigationProp>();
+  const [loading, setLoading] = useState(false);
 
   const {control, handleSubmit} = useForm<SignInData>();
 
-  const onSignInPressed = (data: SignInData) => {
-    console.log(data);
-    // validate user
-    // navigation.navigate('Home');
+  const onSignInPressed = async ({username, password}: SignInData) => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      const response = await Auth.signIn({username, password});
+      console.log({response});
+      //TODO: save user data in context
+    } catch (error) {
+      console.log({error});
+      if ((error as Error).name === 'UserNotConfirmedException') {
+        navigation.navigate('Confirm email', {username});
+        return;
+      }
+      Alert.alert('Oops', (error as Error).message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onForgotPasswordPressed = () => {
@@ -68,7 +85,10 @@ const SignInScreen = () => {
           }}
         />
 
-        <CustomButton text="Sign In" onPress={handleSubmit(onSignInPressed)} />
+        <CustomButton
+          text={loading ? 'Loading...' : 'Sign In'}
+          onPress={handleSubmit(onSignInPressed)}
+        />
 
         <CustomButton
           text="Forgot password?"
