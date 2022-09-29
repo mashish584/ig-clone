@@ -1,11 +1,25 @@
+import {Linking} from 'react-native';
 import {Amplify} from 'aws-amplify';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {withAuthenticator, AmplifyTheme} from 'aws-amplify-react-native';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 import Navigation from './src/navigation';
 import awsconfig from './src/aws-exports';
-import {colors} from './src/theme';
 import {AuthContextProvider} from './src/context/AuthContext';
+
+const urlOpener = async (url: string, redirectUrl: string) => {
+  await InAppBrowser.isAvailable();
+  const response = await InAppBrowser.openAuth(url, redirectUrl, {
+    showTitle: false,
+    enableUrlBarHiding: true,
+    enableDefaultShare: false,
+    ephemeralWebSession: false,
+  });
+
+  if (response.type === 'success') {
+    Linking.openURL(response.url);
+  }
+};
 
 const updatedConfig = {
   ...awsconfig,
@@ -13,10 +27,11 @@ const updatedConfig = {
     ...awsconfig.oauth,
     redriectSignIn: 'notjustphotos://',
     redirectSignOut: 'notjustphotos://',
+    urlOpener,
   },
 };
 
-Amplify.configure(awsconfig);
+Amplify.configure(updatedConfig);
 
 const App = () => {
   return (
