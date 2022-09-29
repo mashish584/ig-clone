@@ -1,4 +1,4 @@
-package com.instagram.newarchitecture.modules;
+package dev.notjust.instagram.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

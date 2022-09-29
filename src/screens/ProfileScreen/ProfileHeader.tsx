@@ -5,7 +5,7 @@ import {Auth} from 'aws-amplify';
 
 import user from '../../assets/data/users.json';
 import Button from '../../components/Button';
-import {ProfileNavigationProp} from '../../types/navigation';
+import {ProfileNavigationProp} from '../../navigation/navigation';
 import styles from './styles';
 
 const ProfileHeader = () => {

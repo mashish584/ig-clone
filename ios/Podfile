@@ -5,7 +5,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '12.4'
 install! 'cocoapods', :deterministic_uuids => false
 
-target 'instagram' do
+target 'notJustInstagram' do
   use_expo_modules!
   post_integrate do |installer|
     begin
@@ -35,7 +35,7 @@ target 'instagram' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'instagramTests' do
+  target 'notJustInstagramTests' do
     inherit! :complete
     # Pods for testing
   end

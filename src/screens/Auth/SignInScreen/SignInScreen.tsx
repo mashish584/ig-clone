@@ -1,3 +1,4 @@
+import {useContext, useState} from 'react';
 import {
   View,
   Image,
@@ -7,14 +8,15 @@ import {
   Alert,
 } from 'react-native';
 import {Auth} from 'aws-amplify';
+import {useNavigation} from '@react-navigation/native';
+import {useForm} from 'react-hook-form';
 
 import FormInput from '../components/FormInput';
 import CustomButton from '../components/CustomButton';
 import SocialSignInButtons from '../components/SocialSignInButtons';
-import {useNavigation} from '@react-navigation/native';
-import {useForm} from 'react-hook-form';
 import {SignInNavigationProp} from '../../../types/navigation';
-import {useState} from 'react';
+
+import {useAuthContext} from '../../../context/AuthContext';
 
 type SignInData = {
   username: string;
@@ -25,6 +27,7 @@ const SignInScreen = () => {
   const {height} = useWindowDimensions();
   const navigation = useNavigation<SignInNavigationProp>();
   const [loading, setLoading] = useState(false);
+  const {setUser} = useAuthContext();
 
   const {control, handleSubmit} = useForm<SignInData>();
 
@@ -32,11 +35,9 @@ const SignInScreen = () => {
     if (loading) return;
     setLoading(true);
     try {
-      const response = await Auth.signIn({username, password});
-      console.log({response});
-      //TODO: save user data in context
+      const cognitoUser = await Auth.signIn({username, password});
+      setUser(cognitoUser);
     } catch (error) {
-      console.log({error});
       if ((error as Error).name === 'UserNotConfirmedException') {
         navigation.navigate('Confirm email', {username});
         return;

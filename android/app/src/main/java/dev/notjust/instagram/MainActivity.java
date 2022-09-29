@@ -1,4 +1,4 @@
-package com.instagram;
+package dev.notjust.instagram;
 import expo.modules.ReactActivityDelegateWrapper;
 
 import android.os.Bundle;
@@ -14,7 +14,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "instagram";
+    return "notJustInstagram";
   }
 
   /**
