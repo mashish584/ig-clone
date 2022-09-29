@@ -7,6 +7,15 @@ import awsconfig from './src/aws-exports';
 import {colors} from './src/theme';
 import {AuthContextProvider} from './src/context/AuthContext';
 
+const updatedConfig = {
+  ...awsconfig,
+  oauth: {
+    ...awsconfig.oauth,
+    redriectSignIn: 'notjustphotos://',
+    redirectSignOut: 'notjustphotos://',
+  },
+};
+
 Amplify.configure(awsconfig);
 
 const App = () => {

@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import {useState} from 'react';
 import {
   View,
   Image,
@@ -16,8 +16,6 @@ import CustomButton from '../components/CustomButton';
 import SocialSignInButtons from '../components/SocialSignInButtons';
 import {SignInNavigationProp} from '../../../types/navigation';
 
-import {useAuthContext} from '../../../context/AuthContext';
-
 type SignInData = {
   username: string;
   password: string;
@@ -27,7 +25,6 @@ const SignInScreen = () => {
   const {height} = useWindowDimensions();
   const navigation = useNavigation<SignInNavigationProp>();
   const [loading, setLoading] = useState(false);
-  const {setUser} = useAuthContext();
 
   const {control, handleSubmit} = useForm<SignInData>();
 
@@ -35,8 +32,7 @@ const SignInScreen = () => {
     if (loading) return;
     setLoading(true);
     try {
-      const cognitoUser = await Auth.signIn({username, password});
-      setUser(cognitoUser);
+      await Auth.signIn({username, password});
     } catch (error) {
       if ((error as Error).name === 'UserNotConfirmedException') {
         navigation.navigate('Confirm email', {username});
