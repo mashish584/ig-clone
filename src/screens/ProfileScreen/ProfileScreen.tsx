@@ -7,7 +7,7 @@ import {
   MyUserProfileNavigationProp,
   MyProfileRouteProp,
   UserProfileRouteProp,
-} from '../../navigation/types';
+} from '../../types/navigation';
 
 import user from '../../assets/data/users.json';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -19,8 +19,6 @@ const ProfileScreen = () => {
   >();
 
   const userId = route.params?.userId;
-
-  console.log({userId});
 
   return <FeedGridView data={user.posts} ListHeaderComponent={ProfileHeader} />;
 };
