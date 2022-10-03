@@ -4,12 +4,15 @@ import {useForm, Control, Controller} from 'react-hook-form';
 import {Asset, launchImageLibrary} from 'react-native-image-picker';
 import user from '../../assets/data/users.json';
 import {colors, fonts} from '../../theme';
-import {IUser} from '../../types/model';
+import {User} from '../../API';
 
 const URL_REGEX =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 
-type IEditableUser = Omit<IUser, 'id' | 'posts'>;
+type IEditableUser = Pick<
+  User,
+  'name' | 'email' | 'username' | 'bio' | 'website'
+>;
 
 interface ICustomInput {
   label: string;
@@ -34,7 +37,7 @@ const CustomInput = (props: ICustomInput) => {
               <TextInput
                 onChangeText={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value || ''}
                 placeholder={label}
                 style={[
                   styles.input,
@@ -74,7 +77,7 @@ const EditProfileScreen = () => {
   function onChangePhoto() {
     launchImageLibrary(
       {mediaType: 'photo'},
-      ({didCancel, errorCode, errorMessage, assets}) => {
+      ({didCancel, errorCode, assets}) => {
         if (!didCancel && !errorCode && assets?.length) {
           setSelectedPhoto(assets[0]);
         }

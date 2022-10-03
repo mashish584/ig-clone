@@ -6,9 +6,16 @@ import FeedGridItem from './FeedGridItem';
 interface IFeedGridView<T>
   extends Pick<FlatListProps<T>, 'ListHeaderComponent'> {
   data: (Post | null)[];
+  refetch: () => void;
+  loading: boolean;
 }
 
-const FeedGridView = ({data, ...props}: IFeedGridView<Post[]>) => {
+const FeedGridView = ({
+  data,
+  refetch,
+  loading,
+  ...props
+}: IFeedGridView<Post[]>) => {
   return (
     <FlatList
       data={data}
@@ -22,6 +29,8 @@ const FeedGridView = ({data, ...props}: IFeedGridView<Post[]>) => {
       showsVerticalScrollIndicator={false}
       numColumns={3}
       style={{marginHorizontal: -1}}
+      onRefresh={refetch}
+      refreshing={loading}
       {...props}
     />
   );

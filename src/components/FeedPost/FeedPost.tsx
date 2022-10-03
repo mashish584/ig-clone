@@ -13,11 +13,11 @@ import VideoPlayer from '../VideoPlayer/VideoPlayer';
 import DoublePress from '../DoublePressable';
 import Carousel from '../Carousel';
 
-import {IPost} from '../../types/model';
 import {FeedNavigationProp} from '../../types/navigation';
+import {Post} from '../../API';
 
 interface IFeedPost {
-  post: IPost;
+  post: Post;
   isVisible: boolean;
 }
 

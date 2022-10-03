@@ -10,12 +10,17 @@ import {User} from '../../API';
 import {ProfileNavigationProp} from '../../types/navigation';
 
 import user from '../../assets/data/users.json';
+import {useAuthContext} from '../../context/AuthContext';
 
 interface IProfileHeader {
   user: User;
 }
 
 const ProfileHeader = ({user}: IProfileHeader) => {
+  const {userId} = useAuthContext();
+
+  const isLoggedInUser = userId === user.id;
+
   const navigation = useNavigation<ProfileNavigationProp>();
   return (
     <View style={styles.root}>
@@ -43,18 +48,20 @@ const ProfileHeader = ({user}: IProfileHeader) => {
       <Text style={styles.username}>{user.name}</Text>
       <Text>{user.bio}</Text>
 
-      <View style={styles.actionGroup}>
-        <Button
-          text="Edit Profile"
-          style={{flex: 0.49}}
-          onPress={() => navigation.navigate('Edit Profile')}
-        />
-        <Button
-          text="Sign Out"
-          style={{flex: 0.49}}
-          onPress={() => Auth.signOut()}
-        />
-      </View>
+      {isLoggedInUser && (
+        <View style={styles.actionGroup}>
+          <Button
+            text="Edit Profile"
+            style={{flex: 0.49}}
+            onPress={() => navigation.navigate('Edit Profile')}
+          />
+          <Button
+            text="Sign Out"
+            style={{flex: 0.49}}
+            onPress={() => Auth.signOut()}
+          />
+        </View>
+      )}
     </View>
   );
 };
