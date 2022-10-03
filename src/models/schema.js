@@ -10,31 +10,19 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "User": {
-                    "name": "User",
+                "userID": {
+                    "name": "userID",
                     "isArray": false,
-                    "type": {
-                        "model": "User"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "userID"
-                    }
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
                 },
-                "Post": {
-                    "name": "Post",
+                "postID": {
+                    "name": "postID",
                     "isArray": false,
-                    "type": {
-                        "model": "Post"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "postID"
-                    }
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -75,6 +63,236 @@ export const schema = {
                         "name": "byPost",
                         "fields": [
                             "postID"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "Comment": {
+            "name": "Comment",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "comment": {
+                    "name": "comment",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "userID": {
+                    "name": "userID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "postID": {
+                    "name": "postID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Comments",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byUser",
+                        "fields": [
+                            "userID"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byPost",
+                        "fields": [
+                            "postID"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "Post": {
+            "name": "Post",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "description": {
+                    "name": "description",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "image": {
+                    "name": "image",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "images": {
+                    "name": "images",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "video": {
+                    "name": "video",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "nofComments": {
+                    "name": "nofComments",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "nofLikes": {
+                    "name": "nofLikes",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "userID": {
+                    "name": "userID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "Likes": {
+                    "name": "Likes",
+                    "isArray": true,
+                    "type": {
+                        "model": "Like"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "postID"
+                    }
+                },
+                "Comments": {
+                    "name": "Comments",
+                    "isArray": true,
+                    "type": {
+                        "model": "Comment"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "postID"
+                    }
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Posts",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byUser",
+                        "fields": [
+                            "userID"
                         ]
                     }
                 },
@@ -180,7 +398,7 @@ export const schema = {
                     "isArrayNullable": true,
                     "association": {
                         "connectionType": "HAS_MANY",
-                        "associatedWith": "User"
+                        "associatedWith": "userID"
                     }
                 },
                 "Comments": {
@@ -194,7 +412,7 @@ export const schema = {
                     "isArrayNullable": true,
                     "association": {
                         "connectionType": "HAS_MANY",
-                        "associatedWith": "User"
+                        "associatedWith": "userID"
                     }
                 },
                 "Likes": {
@@ -208,7 +426,7 @@ export const schema = {
                     "isArrayNullable": true,
                     "association": {
                         "connectionType": "HAS_MANY",
-                        "associatedWith": "User"
+                        "associatedWith": "userID"
                     }
                 },
                 "createdAt": {
@@ -252,257 +470,9 @@ export const schema = {
                     }
                 }
             ]
-        },
-        "Post": {
-            "name": "Post",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "description": {
-                    "name": "description",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "image": {
-                    "name": "image",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "images": {
-                    "name": "images",
-                    "isArray": true,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": [],
-                    "isArrayNullable": true
-                },
-                "video": {
-                    "name": "video",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "nofComments": {
-                    "name": "nofComments",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "nofLikes": {
-                    "name": "nofLikes",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "User": {
-                    "name": "User",
-                    "isArray": false,
-                    "type": {
-                        "model": "User"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "userID"
-                    }
-                },
-                "Likes": {
-                    "name": "Likes",
-                    "isArray": true,
-                    "type": {
-                        "model": "Like"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "Post"
-                    }
-                },
-                "Comments": {
-                    "name": "Comments",
-                    "isArray": true,
-                    "type": {
-                        "model": "Comment"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "Post"
-                    }
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                }
-            },
-            "syncable": true,
-            "pluralName": "Posts",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byUser",
-                        "fields": [
-                            "userID"
-                        ]
-                    }
-                },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "allow": "public",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
-        },
-        "Comment": {
-            "name": "Comment",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "comment": {
-                    "name": "comment",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "User": {
-                    "name": "User",
-                    "isArray": false,
-                    "type": {
-                        "model": "User"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "userID"
-                    }
-                },
-                "Post": {
-                    "name": "Post",
-                    "isArray": false,
-                    "type": {
-                        "model": "Post"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "postID"
-                    }
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                }
-            },
-            "syncable": true,
-            "pluralName": "Comments",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byUser",
-                        "fields": [
-                            "userID"
-                        ]
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byPost",
-                        "fields": [
-                            "postID"
-                        ]
-                    }
-                },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "allow": "public",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
         }
     },
     "enums": {},
     "nonModels": {},
-    "version": "98fef4e3d587748107631c8bf02c6b42"
+    "version": "b636e2dc0bb881bc3d956d9b83b86dd4"
 };

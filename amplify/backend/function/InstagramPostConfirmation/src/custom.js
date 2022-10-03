@@ -31,8 +31,8 @@ const saveUser = async user => {
     createdAt: dateString,
     updatedAt: dateString,
     __typename: 'User',
-    __lastChangedAt: timestamp,
-    __version: 1,
+    _lastChangedAt: timestamp,
+    _version: 1,
   };
   const params = {
     TableName,
