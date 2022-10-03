@@ -6,6 +6,7 @@ import InAppBrowser from 'react-native-inappbrowser-reborn';
 import Navigation from './src/navigation';
 import awsconfig from './src/aws-exports';
 import {AuthContextProvider} from './src/context/AuthContext';
+import Client from './src/apollo/Client';
 
 const urlOpener = async (url: string, redirectUrl: string) => {
   await InAppBrowser.isAvailable();
@@ -37,7 +38,9 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <AuthContextProvider>
-        <Navigation />
+        <Client>
+          <Navigation />
+        </Client>
       </AuthContextProvider>
     </SafeAreaProvider>
   );

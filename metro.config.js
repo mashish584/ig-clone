@@ -6,6 +6,9 @@
  */
 
 module.exports = {
+  resolver: {
+    backlistRE: /#current-cloud-backend\/.*/,
+  },
   transformer: {
     getTransformOptions: async () => ({
       transform: {
