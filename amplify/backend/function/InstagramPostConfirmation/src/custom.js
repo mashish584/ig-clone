@@ -60,6 +60,9 @@ exports.handler = async (event, context) => {
     id: userAttributes.sub,
     name: userAttributes.name,
     email: userAttributes.email,
+    nofPosts: 0,
+    nofFollowers: 0,
+    nofFollowings: 0,
   };
 
   // check if user already exist
