@@ -1,10 +1,34 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TextInput,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import {useForm, Control, Controller} from 'react-hook-form';
 import {Asset, launchImageLibrary} from 'react-native-image-picker';
-import user from '../../assets/data/users.json';
+import {useMutation, useQuery} from '@apollo/client';
+import {useNavigation} from '@react-navigation/native';
+import {Auth} from 'aws-amplify';
+
+import ApiErrorMessage from '../../components/ApiErrorMessage';
+
 import {colors, fonts} from '../../theme';
-import {User} from '../../API';
+import {
+  DeleteUserMutation,
+  DeleteUserMutationVariables,
+  GetUserQuery,
+  GetUserQueryVariables,
+  UpdateUserMutation,
+  UpdateUserMutationVariables,
+  User,
+} from '../../API';
+
+import {deleteUser, getUser, updateUser} from './query';
+import {useAuthContext} from '../../context/AuthContext';
 
 const URL_REGEX =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
@@ -60,18 +84,36 @@ const CustomInput = (props: ICustomInput) => {
 };
 
 const EditProfileScreen = () => {
+  const navigation = useNavigation();
   const [selectedPhoto, setSelectedPhoto] = useState<null | Asset>(null);
-  const {control, handleSubmit} = useForm<IEditableUser>({
-    defaultValues: {
-      name: user.name,
-      username: user.username,
-      website: user.website,
-      bio: user.bio,
-    },
-  });
+  const {control, handleSubmit, setValue} = useForm<IEditableUser>({});
+  const {userId, user: authUser} = useAuthContext();
 
-  function onSubmit(data: IEditableUser) {
-    console.log('Submit', data);
+  const {data, loading, error} = useQuery<GetUserQuery, GetUserQueryVariables>(
+    getUser,
+    {variables: {id: userId}},
+  );
+
+  const [
+    onUpdateUser,
+    {data: updateData, loading: updateLoading, error: updateError},
+  ] = useMutation<UpdateUserMutation, UpdateUserMutationVariables>(updateUser);
+  const [removeUser, {loading: deleteLoading, error: deleteErorr}] =
+    useMutation<DeleteUserMutation, DeleteUserMutationVariables>(deleteUser);
+
+  const user = data?.getUser;
+
+  async function onSubmit(formData: IEditableUser) {
+    await onUpdateUser({
+      variables: {
+        input: {
+          id: userId,
+          ...formData,
+          _version: user?._version,
+        },
+      },
+    });
+    navigation.goBack();
   }
 
   function onChangePhoto() {
@@ -82,6 +124,57 @@ const EditProfileScreen = () => {
           setSelectedPhoto(assets[0]);
         }
       },
+    );
+  }
+
+  async function onDeleteUser() {
+    if (!user) return;
+    // delete form db
+    await removeUser({
+      variables: {input: {id: userId, _version: user?._version}},
+    });
+    //delete from cognito
+    authUser?.deleteUser(err => {
+      if (err) {
+        console.log({err});
+      }
+      Auth.signOut();
+    });
+  }
+
+  function confirmDelete() {
+    Alert.alert('Are you sure?', 'Deleting your user profile is permanent', [
+      {
+        text: 'Yes, Delete',
+        style: 'destructive',
+        onPress: onDeleteUser,
+      },
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+    ]);
+  }
+
+  useEffect(() => {
+    if (user) {
+      setValue('name', user.name);
+      setValue('username', user.username);
+      setValue('bio', user.bio);
+      setValue('website', user.website);
+    }
+  }, [user, setValue]);
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
+
+  if (error) {
+    return (
+      <ApiErrorMessage
+        title="Error fetching or updating the user"
+        message={error.message || updateError?.message}
+      />
     );
   }
 
@@ -131,7 +224,10 @@ const EditProfileScreen = () => {
         multiline
       />
       <Text style={styles.textButton} onPress={handleSubmit(onSubmit)}>
-        Submit
+        {updateLoading ? 'Submitting...' : 'Submit'}
+      </Text>
+      <Text style={styles.textButtonDanger} onPress={confirmDelete}>
+        {updateLoading ? 'Deleting...' : 'Delete User'}
       </Text>
     </View>
   );
@@ -149,6 +245,12 @@ const styles = StyleSheet.create({
   },
   textButton: {
     color: colors.primary,
+    fontSize: fonts.size.md,
+    fontWeight: fonts.weight.semi,
+    margin: 10,
+  },
+  textButtonDanger: {
+    color: colors.accent,
     fontSize: fonts.size.md,
     fontWeight: fonts.weight.semi,
     margin: 10,

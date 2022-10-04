@@ -60,6 +60,7 @@ exports.handler = async (event, context) => {
     id: userAttributes.sub,
     name: userAttributes.name,
     email: userAttributes.email,
+    username: event.userName || userAttributes.username || '',
     nofPosts: 0,
     nofFollowers: 0,
     nofFollowings: 0,

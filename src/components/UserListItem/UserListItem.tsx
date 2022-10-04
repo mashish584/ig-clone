@@ -24,7 +24,7 @@ const UserListItem = ({user}: IUserListItem) => {
         style={styles.image}
       />
       <View>
-        <Text>{user.name || 'Jon Doe'}</Text>
+        <Text>{user.name}</Text>
         <Text>{user.username}</Text>
       </View>
     </Pressable>

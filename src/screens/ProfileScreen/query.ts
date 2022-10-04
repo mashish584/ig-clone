@@ -25,9 +25,9 @@ export const getUser = gql`
       }
       createdAt
       updatedAt
-      # _version
+      _version
       _deleted
-      # _lastChangedAt
+      _lastChangedAt
     }
   }
 `;
