@@ -5,6 +5,7 @@ import {RouteProp} from '@react-navigation/native';
 export type RootNavigatorParamList = {
   Auth: undefined;
   Home: undefined;
+  EditProfile: undefined;
   Comments: {postId: string};
 };
 
