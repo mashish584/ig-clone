@@ -73,12 +73,12 @@ const FeedPost = (props: IFeedPost) => {
       <View style={styles.header}>
         <Image
           source={{
-            uri: post.user.image,
+            uri: post?.user?.image || 'https://unsplash.it/100/100',
           }}
           style={styles.userAvatar}
         />
         <Text onPress={showUserProfile} style={styles.userName}>
-          {post.user.username}
+          {post?.user?.username || ''}
         </Text>
         <Entypo
           name="dots-three-horizontal"
@@ -126,7 +126,7 @@ const FeedPost = (props: IFeedPost) => {
         </Text>
         {/* Post Description */}
         <Text style={styles.text} numberOfLines={isDescriptionExpanded ? 0 : 3}>
-          <Text style={styles.bold}>{post.user.username}</Text>{' '}
+          <Text style={styles.bold}>{post?.user?.username || ''}</Text>
           {post.description}
         </Text>
         <Text onPress={toogleDescriptionExpanded}>
@@ -136,7 +136,7 @@ const FeedPost = (props: IFeedPost) => {
         <Text onPress={navigateToComments}>
           View all {post.nofComments} comments
         </Text>
-        {post.comments.map(comment => {
+        {post?.comments?.map(comment => {
           return <Comment key={comment.id} comment={comment} />;
         })}
         {/* Posted date */}

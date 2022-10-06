@@ -32,6 +32,30 @@ export type ProfileStackNavigatorParamList = {
   'Edit Profile': undefined;
 };
 
+export type UploadStackNavigatorParamList = {
+  Camera: undefined;
+  Create: {
+    image?: string;
+    images?: string[];
+    video?: string;
+  };
+};
+
+export type CameraNavigatorProp = NativeStackNavigationProp<
+  UploadStackNavigatorParamList,
+  'Camera'
+>;
+
+export type CreatePostNavigationProp = NativeStackNavigationProp<
+  UploadStackNavigatorParamList,
+  'Create'
+>;
+
+export type CreatePostRouteProp = RouteProp<
+  UploadStackNavigatorParamList,
+  'Create'
+>;
+
 export type MyUserProfileNavigationProp = BottomTabNavigationProp<
   BottomTabNavigatorParamList,
   'ProfileStack'

@@ -10,6 +10,8 @@ import {
 } from 'expo-camera';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {colors} from '../../theme';
+import {useNavigation} from '@react-navigation/native';
+import {CameraNavigatorProp} from '../../types/navigation';
 
 const flashModes = [
   FlashMode.off,
@@ -25,13 +27,14 @@ const flashModeToIcon = {
   [FlashMode.torch]: 'highlight',
 };
 
-const PostUploadScreen = () => {
+const CameraScreen = () => {
   const [hasPermissions, setHasPermissions] = useState<boolean | null>(null);
   const [cameraType, setCameraType] = useState(CameraType.back);
   const [flash, setFlash] = useState(FlashMode.off);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const cameraRef = useRef<Camera>(null);
+  const navigation = useNavigation<CameraNavigatorProp>();
 
   function flipCamera() {
     setCameraType(
@@ -88,6 +91,10 @@ const PostUploadScreen = () => {
       cameraRef.current?.stopRecording();
       setIsRecording(false);
     }
+  }
+
+  function navigateToCreateScreen() {
+    navigation.navigate('Create', {image: 'https://unsplash.it/100/100'});
   }
 
   useEffect(() => {
@@ -154,6 +161,13 @@ const PostUploadScreen = () => {
             color={colors.white}
           />
         </Pressable>
+        <Pressable onPress={navigateToCreateScreen}>
+          <MaterialIcons
+            name="arrow-forward-ios"
+            size={30}
+            color={colors.white}
+          />
+        </Pressable>
       </View>
     </View>
   );
@@ -185,4 +199,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostUploadScreen;
+export default CameraScreen;

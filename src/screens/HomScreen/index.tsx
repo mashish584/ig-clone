@@ -19,7 +19,7 @@ const viewabilityConfig: ViewabilityConfig = {
 };
 
 const HomeScreen = () => {
-  const {data, loading, error} = useQuery<
+  const {data, loading, error, refetch} = useQuery<
     ListPostsQuery,
     ListPostsQueryVariables
   >(listPosts);
@@ -47,7 +47,8 @@ const HomeScreen = () => {
     );
   }
 
-  console.log(data);
+  const posts = data?.listPosts?.items || [];
+  console.log({posts});
 
   return (
     <FlatList
@@ -55,11 +56,15 @@ const HomeScreen = () => {
       viewabilityConfig={viewabilityConfig}
       onViewableItemsChanged={onViewableItemChange.current}
       showsVerticalScrollIndicator={false}
-      renderItem={({item}) =>
-        item && (
-          <FeedPost post={item} isVisible={item.id === currentActivePost} />
-        )
-      }
+      renderItem={({item}) => {
+        return (
+          item && (
+            <FeedPost post={item} isVisible={item.id === currentActivePost} />
+          )
+        );
+      }}
+      onRefresh={refetch}
+      refreshing={loading}
     />
   );
 };
