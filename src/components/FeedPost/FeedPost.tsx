@@ -14,8 +14,22 @@ import DoublePress from '../DoublePressable';
 import Carousel from '../Carousel';
 
 import {FeedNavigationProp} from '../../types/navigation';
-import {Post} from '../../API';
+import {
+  CreateCommentMutationVariables,
+  CreateLikeMutation,
+  CreateLikeMutationVariables,
+  DeleteLikeMutation,
+  DeleteLikeMutationVariables,
+  LikesForPostByUserQuery,
+  LikesForPostByUserQueryVariables,
+  Post,
+  UsersByUsernameQuery,
+  UsersByUsernameQueryVariables,
+} from '../../API';
 import ActionMenu from './ActionMenu';
+import {useMutation, useQuery} from '@apollo/client';
+import {createLike, deleteLike, likesForPostByUser} from './query';
+import {useAuthContext} from '../../context/AuthContext';
 
 interface IFeedPost {
   post: Post;
@@ -26,15 +40,46 @@ const FeedPost = (props: IFeedPost) => {
   const navigation = useNavigation<FeedNavigationProp>();
   const {post, isVisible} = props;
 
+  const {userId} = useAuthContext();
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [isPostLiked, setIsPostLiked] = useState(false);
+
+  const [doCreateLike] = useMutation<
+    CreateLikeMutation,
+    CreateLikeMutationVariables
+  >(createLike, {
+    variables: {input: {userID: userId, postID: post.id}},
+    refetchQueries: ['LikesForPostByUser'],
+  });
+
+  const [doDeleteLike] = useMutation<
+    DeleteLikeMutation,
+    DeleteLikeMutationVariables
+  >(deleteLike);
+
+  const {data: userLikesData} = useQuery<
+    LikesForPostByUserQuery,
+    LikesForPostByUserQueryVariables
+  >(likesForPostByUser, {
+    variables: {postID: post.id, userID: {eq: userId}},
+  });
+
+  const userLike = (userLikesData?.likesForPostByUser?.items || []).filter(
+    like => !like?._deleted,
+  )?.[0];
 
   function toogleDescriptionExpanded() {
     setIsDescriptionExpanded(!isDescriptionExpanded);
   }
 
-  function togglePostLike() {
-    setIsPostLiked(!isPostLiked);
+  async function togglePostLike() {
+    if (userLike) {
+      doDeleteLike({
+        variables: {input: {id: userLike.id, _version: userLike._version}},
+      });
+    } else {
+      doCreateLike();
+    }
   }
 
   function showUserProfile() {
@@ -95,10 +140,10 @@ const FeedPost = (props: IFeedPost) => {
         <View style={styles.iconContainer}>
           <Pressable onPress={togglePostLike}>
             <AntDesign
-              name={isPostLiked ? 'heart' : 'hearto'}
+              name={userLike ? 'heart' : 'hearto'}
               size={24}
               style={styles.icon}
-              color={isPostLiked ? colors.accent : colors.black}
+              color={userLike ? colors.accent : colors.black}
             />
           </Pressable>
           <Ionicons
