@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   optionText: {
     textAlign: 'center',
     fontSize: 20,
-    padding: 10,
+    padding: 20,
   },
 });
 

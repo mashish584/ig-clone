@@ -14,6 +14,8 @@ import {useMutation} from '@apollo/client';
 import {deletePost} from './query';
 import {DeletePostMutation, DeletePostMutationVariables, Post} from '../../API';
 import {useAuthContext} from '../../context/AuthContext';
+import {useNavigation} from '@react-navigation/native';
+import {FeedNavigationProp} from '../../types/navigation';
 
 interface IActionMenu {
   post: Post;
@@ -21,6 +23,7 @@ interface IActionMenu {
 
 const ActionMenu = ({post}: IActionMenu) => {
   const {userId} = useAuthContext();
+  const navigation = useNavigation<FeedNavigationProp>();
   const isMyPost = userId === post.userID;
   const [onPostDelete] = useMutation<
     DeletePostMutation,
@@ -42,7 +45,9 @@ const ActionMenu = ({post}: IActionMenu) => {
       {text: 'Delete Post', style: 'destructive', onPress: startDeletetingPost},
     ]);
   };
-  const onEdit = async () => {};
+  const onEdit = async () => {
+    navigation.navigate('UpdatePost', {id: post.id});
+  };
 
   return (
     <Menu style={styles.threeDots} renderer={renderers.SlideInMenu}>
@@ -58,7 +63,7 @@ const ActionMenu = ({post}: IActionMenu) => {
             <MenuOption onSelect={onDelete}>
               <Text style={[styles.optionText, {color: 'red'}]}>Delete</Text>
             </MenuOption>
-            <MenuOption onSelect={onEdit} disabled={true}>
+            <MenuOption onSelect={onEdit}>
               <Text style={[styles.optionText]}>Edit</Text>
             </MenuOption>
           </>
