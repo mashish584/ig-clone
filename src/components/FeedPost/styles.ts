@@ -43,6 +43,11 @@ const styles = StyleSheet.create({
     color: colors.black,
     lineHeight: 18,
   },
+  optionText: {
+    textAlign: 'center',
+    fontSize: 20,
+    padding: 10,
+  },
 });
 
 export default styles;

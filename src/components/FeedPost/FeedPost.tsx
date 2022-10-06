@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {Image, Pressable, Text, View} from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
+
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -15,6 +15,7 @@ import Carousel from '../Carousel';
 
 import {FeedNavigationProp} from '../../types/navigation';
 import {Post} from '../../API';
+import ActionMenu from './ActionMenu';
 
 interface IFeedPost {
   post: Post;
@@ -37,11 +38,15 @@ const FeedPost = (props: IFeedPost) => {
   }
 
   function showUserProfile() {
-    navigation.navigate('UserProfile', {userId: post.user.id});
+    if (post.userID) {
+      navigation.navigate('UserProfile', {userId: post.userID});
+    }
   }
 
   function navigateToComments() {
-    navigation.navigate('Comments', {postId: post.id});
+    if (post.id) {
+      navigation.navigate('Comments', {postId: post.id});
+    }
   }
 
   let content = null;
@@ -73,18 +78,14 @@ const FeedPost = (props: IFeedPost) => {
       <View style={styles.header}>
         <Image
           source={{
-            uri: post?.user?.image || 'https://unsplash.it/100/100',
+            uri: post?.User?.image || 'https://unsplash.it/100/100',
           }}
           style={styles.userAvatar}
         />
         <Text onPress={showUserProfile} style={styles.userName}>
-          {post?.user?.username || ''}
+          {post?.User?.username || ''}
         </Text>
-        <Entypo
-          name="dots-three-horizontal"
-          size={16}
-          style={styles.threeDots}
-        />
+        <ActionMenu post={post} />
       </View>
       {/* Content */}
       {content}
@@ -136,8 +137,8 @@ const FeedPost = (props: IFeedPost) => {
         <Text onPress={navigateToComments}>
           View all {post.nofComments} comments
         </Text>
-        {post?.comments?.map(comment => {
-          return <Comment key={comment.id} comment={comment} />;
+        {post?.Comments?.items?.map(comment => {
+          return comment && <Comment key={comment.id} comment={comment} />;
         })}
         {/* Posted date */}
         <Text>{post.createdAt}</Text>
