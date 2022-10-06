@@ -94,7 +94,12 @@ const CameraScreen = () => {
   }
 
   function navigateToCreateScreen() {
-    navigation.navigate('Create', {image: 'https://unsplash.it/100/100'});
+    navigation.navigate('Create', {
+      images: [
+        'https://images.pexels.com/photos/3686686/pexels-photo-3686686.jpeg',
+        'https://unsplash.it/100/100',
+      ],
+    });
   }
 
   useEffect(() => {

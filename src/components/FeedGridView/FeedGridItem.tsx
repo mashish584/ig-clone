@@ -12,7 +12,7 @@ const FeedGridItem = ({data}: IFeedGridItem) => {
   return (
     <View style={{flex: 1, padding: 1, aspectRatio: 1, maxWidth: '33.33%'}}>
       <Image source={{uri: data.image || data.images?.[0]}} style={{flex: 1}} />
-      {data.images && (
+      {data.images && data.images?.length > 0 && (
         <MaterialIcons
           name="collections"
           size={16}
