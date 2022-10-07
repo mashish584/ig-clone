@@ -16,6 +16,17 @@ export const listPosts = gql`
         nofComments
         nofLikes
         userID
+        Likes {
+          items {
+            id
+            User {
+              id
+              username
+            }
+          }
+          nextToken
+          startedAt
+        }
         createdAt
         updatedAt
         _version

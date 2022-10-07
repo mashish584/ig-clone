@@ -14,22 +14,9 @@ import DoublePress from '../DoublePressable';
 import Carousel from '../Carousel';
 
 import {FeedNavigationProp} from '../../types/navigation';
-import {
-  CreateCommentMutationVariables,
-  CreateLikeMutation,
-  CreateLikeMutationVariables,
-  DeleteLikeMutation,
-  DeleteLikeMutationVariables,
-  LikesForPostByUserQuery,
-  LikesForPostByUserQueryVariables,
-  Post,
-  UsersByUsernameQuery,
-  UsersByUsernameQueryVariables,
-} from '../../API';
+import {Post} from '../../API';
 import ActionMenu from './ActionMenu';
-import {useMutation, useQuery} from '@apollo/client';
-import {createLike, deleteLike, likesForPostByUser} from './query';
-import {useAuthContext} from '../../context/AuthContext';
+import useLikeService from '../../services/LikeService';
 
 interface IFeedPost {
   post: Post;
@@ -40,46 +27,14 @@ const FeedPost = (props: IFeedPost) => {
   const navigation = useNavigation<FeedNavigationProp>();
   const {post, isVisible} = props;
 
-  const {userId} = useAuthContext();
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [isPostLiked, setIsPostLiked] = useState(false);
 
-  const [doCreateLike] = useMutation<
-    CreateLikeMutation,
-    CreateLikeMutationVariables
-  >(createLike, {
-    variables: {input: {userID: userId, postID: post.id}},
-    refetchQueries: ['LikesForPostByUser'],
-  });
+  const {togglePostLike, userLike} = useLikeService(post);
 
-  const [doDeleteLike] = useMutation<
-    DeleteLikeMutation,
-    DeleteLikeMutationVariables
-  >(deleteLike);
-
-  const {data: userLikesData} = useQuery<
-    LikesForPostByUserQuery,
-    LikesForPostByUserQueryVariables
-  >(likesForPostByUser, {
-    variables: {postID: post.id, userID: {eq: userId}},
-  });
-
-  const userLike = (userLikesData?.likesForPostByUser?.items || []).filter(
-    like => !like?._deleted,
-  )?.[0];
+  const postLike = post.Likes?.items.filter(item => !item?._deleted) || [];
 
   function toogleDescriptionExpanded() {
     setIsDescriptionExpanded(!isDescriptionExpanded);
-  }
-
-  async function togglePostLike() {
-    if (userLike) {
-      doDeleteLike({
-        variables: {input: {id: userLike.id, _version: userLike._version}},
-      });
-    } else {
-      doCreateLike();
-    }
   }
 
   function showUserProfile() {
@@ -91,6 +46,12 @@ const FeedPost = (props: IFeedPost) => {
   function navigateToComments() {
     if (post.id) {
       navigation.navigate('Comments', {postId: post.id});
+    }
+  }
+
+  function navigateToLikes() {
+    if (post.id) {
+      navigation.navigate('PostLikes', {id: post.id});
     }
   }
 
@@ -166,10 +127,19 @@ const FeedPost = (props: IFeedPost) => {
           />
         </View>
         {/* Post likes */}
-        <Text>
-          Liked by <Text style={styles.bold}>abc</Text> &{' '}
-          <Text style={styles.bold}>{post.nofLikes} others</Text>
-        </Text>
+        {postLike.length === 0 ? (
+          <Text>Be the first to like the post.</Text>
+        ) : (
+          <Text onPress={navigateToLikes}>
+            Liked by{' '}
+            <Text style={styles.bold}>{postLike[0]?.User?.username}</Text>{' '}
+            {postLike.length > 1 && (
+              <>
+                & <Text style={styles.bold}>{post.nofLikes - 1} others</Text>
+              </>
+            )}
+          </Text>
+        )}
         {/* Post Description */}
         <Text style={styles.text} numberOfLines={isDescriptionExpanded ? 0 : 3}>
           <Text style={styles.bold}>{post?.user?.username || ''}</Text>
