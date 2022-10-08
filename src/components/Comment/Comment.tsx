@@ -22,11 +22,14 @@ const Comment = (props: ICommentProps) => {
   return (
     <View style={styles.comment}>
       {includeDetails && (
-        <Image source={{uri: comment.user.image}} style={styles.avatar} />
+        <Image
+          source={{uri: comment.User?.image || 'https://unsplash.it/100/100'}}
+          style={styles.avatar}
+        />
       )}
       <View style={styles.middleColumn}>
         <Text style={styles.commentText}>
-          <Text style={styles.bold}>{comment.user.username}</Text>{' '}
+          <Text style={styles.bold}>{comment.User?.username}</Text>{' '}
           {comment.comment}
         </Text>
         {includeDetails && (

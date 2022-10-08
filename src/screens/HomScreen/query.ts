@@ -27,6 +27,19 @@ export const listPosts = gql`
           nextToken
           startedAt
         }
+        Comments(limit: 2) {
+          items {
+            id
+            comment
+            User {
+              id
+              name
+              username
+            }
+          }
+          nextToken
+          startedAt
+        }
         createdAt
         updatedAt
         _version

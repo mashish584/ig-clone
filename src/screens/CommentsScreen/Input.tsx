@@ -5,19 +5,32 @@ import {
   StyleSheet,
   TextInput,
   Pressable,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import {colors, fonts} from '../../theme';
 
-const Input = () => {
-  const [newComment, setNewComment] = useState('');
+import {Post} from '../../API';
 
-  function onPost() {
-    console.log('Submit Comment');
-  }
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import useCommentService from '../../services/CommentService/CommentService';
+
+interface IInput {
+  postId: string;
+}
+
+const Input = ({postId}: IInput) => {
+  const insets = useSafeAreaInsets();
+  const [newComment, setNewComment] = useState('');
+  const {saveComment} = useCommentService(postId);
+
+  const onPost = async () => {
+    await saveComment(newComment);
+    setNewComment('');
+  };
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, {paddingBottom: insets.bottom}]}>
       <Image
         source={{
           uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/1.jpg',
@@ -32,7 +45,9 @@ const Input = () => {
         onChangeText={setNewComment}
         multiline={true}
       />
-      <Pressable onPress={onPost} style={styles.action}>
+      <Pressable
+        onPress={onPost}
+        style={[styles.action, {bottom: insets.bottom + 5}]}>
         <Text style={styles.text}>POST</Text>
       </Pressable>
     </View>

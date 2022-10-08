@@ -53,6 +53,8 @@ export type UploadStackNavigatorParamList = {
   };
 };
 
+export type CommentRouteProp = RouteProp<RootNavigatorParamList, 'Comments'>;
+
 export type CameraNavigatorProp = NativeStackNavigationProp<
   UploadStackNavigatorParamList,
   'Camera'
