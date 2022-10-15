@@ -5,6 +5,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import dayjs from 'dayjs';
 
 import styles, {colors} from './styles';
 
@@ -142,7 +143,7 @@ const FeedPost = (props: IFeedPost) => {
         )}
         {/* Post Description */}
         <Text style={styles.text} numberOfLines={isDescriptionExpanded ? 0 : 3}>
-          <Text style={styles.bold}>{post?.user?.username || ''}</Text>
+          <Text style={styles.bold}>{post?.User?.username || ''}</Text>
           {post.description}
         </Text>
         <Text onPress={toogleDescriptionExpanded}>
@@ -158,7 +159,7 @@ const FeedPost = (props: IFeedPost) => {
           return comment && <Comment key={comment.id} comment={comment} />;
         })}
         {/* Posted date */}
-        <Text>{post.createdAt}</Text>
+        <Text>{dayjs(post.createdAt).fromNow()}</Text>
       </View>
     </View>
   );

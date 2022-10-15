@@ -2,7 +2,11 @@ import {useQuery} from '@apollo/client';
 import {useRoute} from '@react-navigation/native';
 import React from 'react';
 import {View, Text, FlatList, ActivityIndicator} from 'react-native';
-import {CommentsByPostQuery, CommentsByPostQueryVariables} from '../../API';
+import {
+  CommentsByPostQuery,
+  CommentsByPostQueryVariables,
+  ModelSortDirection,
+} from '../../API';
 import comments from '../../assets/data/comments.json';
 import ApiErrorMessage from '../../components/ApiErrorMessage';
 import Comment from '../../components/Comment';
@@ -17,7 +21,9 @@ const CommentsScreen = () => {
   const {data, loading, error} = useQuery<
     CommentsByPostQuery,
     CommentsByPostQueryVariables
-  >(commentsByPost, {variables: {postID: postId}});
+  >(commentsByPost, {
+    variables: {postID: postId, sortDirection: ModelSortDirection.DESC},
+  });
 
   if (loading) {
     return <ActivityIndicator />;
@@ -43,6 +49,7 @@ const CommentsScreen = () => {
         renderItem={({item}) =>
           item && <Comment comment={item} includeDetails={true} />
         }
+        inverted={true}
         style={{padding: 10}}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={() => (
