@@ -14,7 +14,7 @@ import DoublePress from '../DoublePressable';
 import Carousel from '../Carousel';
 
 import {IPost} from '../../types/model';
-import {FeedNavigationProp} from '../../navigation/types';
+import {FeedNavigationProp} from '../../types/navigation';
 
 interface IFeedPost {
   post: IPost;

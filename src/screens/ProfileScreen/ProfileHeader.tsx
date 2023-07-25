@@ -1,10 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View, Text, Image} from 'react-native';
+import {Auth} from 'aws-amplify';
 
 import user from '../../assets/data/users.json';
 import Button from '../../components/Button';
-import {ProfileNavigationProp} from '../../navigation/types';
+import {ProfileNavigationProp} from '../../types/navigation';
 import styles from './styles';
 
 const ProfileHeader = () => {
@@ -39,9 +40,9 @@ const ProfileHeader = () => {
           onPress={() => navigation.navigate('Edit Profile')}
         />
         <Button
-          text="Go Back"
+          text="Sign Out"
           style={{flex: 0.49}}
-          onPress={() => navigation.goBack()}
+          onPress={() => Auth.signOut()}
         />
       </View>
     </View>
