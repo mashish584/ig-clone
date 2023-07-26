@@ -9,10 +9,13 @@ import {NewPasswordNavigationProp} from '../../../types/navigation';
 import {Auth} from 'aws-amplify';
 
 type NewPasswordType = {
-  username: string;
+  email: string;
   code: string;
   password: string;
 };
+
+const EMAIL_REGEX =
+  /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const NewPasswordScreen = () => {
   const {control, handleSubmit, reset} = useForm<NewPasswordType>();
@@ -21,15 +24,11 @@ const NewPasswordScreen = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const onSubmitPressed = async ({
-    username,
-    code,
-    password,
-  }: NewPasswordType) => {
+  const onSubmitPressed = async ({email, code, password}: NewPasswordType) => {
     if (loading) return;
     try {
       setLoading(true);
-      await Auth.forgotPasswordSubmit(username, code, password);
+      await Auth.forgotPasswordSubmit(email, code, password);
       reset();
       navigation.navigate('Sign in');
     } catch (e) {
@@ -49,10 +48,13 @@ const NewPasswordScreen = () => {
         <Text style={styles.title}>Reset your password</Text>
 
         <FormInput
-          placeholder="Username"
-          name="username"
+          placeholder="Email"
+          name="email"
           control={control}
-          rules={{required: 'Username is required'}}
+          rules={{
+            required: 'Email is required',
+            pattern: {value: EMAIL_REGEX, message: 'Email is invalid'},
+          }}
         />
 
         <FormInput

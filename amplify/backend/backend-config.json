@@ -12,14 +12,16 @@
           "passwordPolicyCharacters": [
             "REQUIRES_LOWERCASE"
           ],
-          "passwordPolicyMinLength": 8
+          "passwordPolicyMinLength": 7
         },
         "signupAttributes": [
           "EMAIL",
           "NAME"
         ],
         "socialProviders": [],
-        "usernameAttributes": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
         "verificationMechanisms": [
           "EMAIL"
         ]
