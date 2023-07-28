@@ -10,6 +10,7 @@ import {
 import {Hub} from 'aws-amplify';
 import {Auth, CognitoUser} from '@aws-amplify/auth';
 import {HubCallback} from '@aws-amplify/core';
+import {Alert} from 'react-native';
 
 type UserType = CognitoUser | null | undefined;
 
@@ -26,17 +27,18 @@ const AuthContext = createContext<AuthContextType>({
 const AuthContextProvider = ({children}: {children: ReactNode}) => {
   const [user, setUser] = useState<UserType>(undefined);
 
+  const checkUser = async () => {
+    try {
+      const authUser = await Auth.currentAuthenticatedUser({
+        bypassCache: true,
+      });
+      setUser(authUser);
+    } catch (e) {
+      setUser(null);
+    }
+  };
+
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const authUser = await Auth.currentAuthenticatedUser({
-          bypassCache: true,
-        });
-        setUser(authUser);
-      } catch (e) {
-        setUser(null);
-      }
-    };
     checkUser();
   }, []);
 
@@ -45,6 +47,10 @@ const AuthContextProvider = ({children}: {children: ReactNode}) => {
       const {event} = data.payload;
       if (event === 'signOut') {
         setUser(null);
+      }
+
+      if (event === 'signIn') {
+        checkUser();
       }
     };
     const hubSubscription = Hub.listen('auth', listener);

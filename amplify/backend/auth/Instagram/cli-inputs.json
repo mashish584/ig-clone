@@ -3,7 +3,7 @@
   "cognitoConfig": {
     "identityPoolName": "testAuthIdentityPool",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "instag806bb6bd",
+    "resourceNameTruncated": "instagc1c09f8e",
     "userPoolName": "Instagram",
     "autoVerifiedAttributes": [
       "email"
@@ -17,7 +17,7 @@
     "emailVerificationSubject": "Verification code: {####}",
     "emailVerificationMessage": "Verification code: {####}",
     "defaultPasswordPolicy": false,
-    "passwordPolicyMinLength": 7,
+    "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [
       "Requires Lowercase"
     ],
@@ -30,9 +30,9 @@
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [],
     "userpoolClientReadAttributes": [],
-    "userpoolClientLambdaRole": "Instag806bb6bd_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "Instagc1c09f8e_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "806bb6bd",
+    "sharedId": "c1c09f8e",
     "resourceName": "Instagram",
     "authSelections": "identityPoolAndUserPool",
     "serviceName": "Cognito",
@@ -45,6 +45,14 @@
     "adminQueries": false,
     "thirdPartyAuth": false,
     "authProviders": [],
+    "hostedUI": true,
+    "hostedUIDomainName": "bk4hn1ptia2l",
+    "authProvidersUserPool": [
+      "Facebook",
+      "Google"
+    ],
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"username\":\"sub\"}}]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"notjustphotos://\"],\"LogoutURLs\":[\"notjustphotos://\"]}",
     "usernameCaseSensitive": false,
     "useEnabledMfas": true
   }

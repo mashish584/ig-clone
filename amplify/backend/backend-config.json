@@ -12,13 +12,16 @@
           "passwordPolicyCharacters": [
             "REQUIRES_LOWERCASE"
           ],
-          "passwordPolicyMinLength": 7
+          "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
           "EMAIL",
           "NAME"
         ],
-        "socialProviders": [],
+        "socialProviders": [
+          "FACEBOOK",
+          "GOOGLE"
+        ],
         "usernameAttributes": [
           "EMAIL"
         ],
@@ -28,6 +31,31 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "InstagramPostConfirmation": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_InstagramPostConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "InstagramPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_InstagramPostConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "InstagramPostConfirmation"
+        }
+      ]
     }
   }
 }
