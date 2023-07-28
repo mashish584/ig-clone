@@ -1,8 +1,18 @@
 {
   "auth": {
-    "Instagram": {
+    "rninstagram": {
       "customAuth": false,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "rninstagramPostConfirmation",
+          "triggerProvider": "Cognito"
+        }
+      ],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
@@ -15,8 +25,8 @@
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
-          "EMAIL",
-          "NAME"
+          "NAME",
+          "EMAIL"
         ],
         "socialProviders": [
           "FACEBOOK",
@@ -34,26 +44,26 @@
     }
   },
   "function": {
-    "InstagramPostConfirmation": {
+    "rninstagramPostConfirmation": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
   "parameters": {
-    "AMPLIFY_function_InstagramPostConfirmation_deploymentBucketName": {
+    "AMPLIFY_function_rninstagramPostConfirmation_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "InstagramPostConfirmation"
+          "resourceName": "rninstagramPostConfirmation"
         }
       ]
     },
-    "AMPLIFY_function_InstagramPostConfirmation_s3Key": {
+    "AMPLIFY_function_rninstagramPostConfirmation_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "InstagramPostConfirmation"
+          "resourceName": "rninstagramPostConfirmation"
         }
       ]
     }

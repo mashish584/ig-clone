@@ -1,24 +1,25 @@
 {
   "staging": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-instagram-staging-120742-authRole",
-      "UnauthRoleArn": "arn:aws:iam::293799087522:role/amplify-instagram-staging-120742-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::293799087522:role/amplify-instagram-staging-120742-authRole",
+      "AuthRoleName": "amplify-rninstagram-staging-170549-authRole",
+      "UnauthRoleArn": "arn:aws:iam::293799087522:role/amplify-rninstagram-staging-170549-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::293799087522:role/amplify-rninstagram-staging-170549-authRole",
       "Region": "ap-south-1",
-      "DeploymentBucketName": "amplify-instagram-staging-120742-deployment",
-      "UnauthRoleName": "amplify-instagram-staging-120742-unauthRole",
-      "StackName": "amplify-instagram-staging-120742",
-      "StackId": "arn:aws:cloudformation:ap-south-1:293799087522:stack/amplify-instagram-staging-120742/4172f950-73cc-11ed-92da-0a4f3d521d4c",
-      "AmplifyAppId": "d1po57laavx7tl"
+      "DeploymentBucketName": "amplify-rninstagram-staging-170549-deployment",
+      "UnauthRoleName": "amplify-rninstagram-staging-170549-unauthRole",
+      "StackName": "amplify-rninstagram-staging-170549",
+      "StackId": "arn:aws:cloudformation:ap-south-1:293799087522:stack/amplify-rninstagram-staging-170549/0064b500-2d69-11ee-af9f-0a586b208460",
+      "AmplifyAppId": "d17e50gio4bdq5",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-rninstagram-staging-170549-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
-        "Instagram": {}
+        "rninstagram": {}
       },
       "function": {
-        "InstagramPostConfirmation": {
-          "deploymentBucketName": "amplify-instagram-staging-120742-deployment",
-          "s3Key": "amplify-builds/InstagramPostConfirmation-596e4e67696a2f553651-build.zip"
+        "rninstagramPostConfirmation": {
+          "deploymentBucketName": "amplify-rninstagram-staging-170549-deployment",
+          "s3Key": "amplify-builds/rninstagramPostConfirmation-444b7231383267424c54-build.zip"
         }
       }
     }
