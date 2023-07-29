@@ -31,9 +31,12 @@ const saveUser = async user => {
 
     const Item = {
       ...user,
-      __typename: 'User',
+      nofPosts: 0,
+      nofFollowers: 0,
+      nofFollowings: 0,
       createdAt: dateString,
       updatedAt: dateString,
+      __typename: 'User',
       _lastChangedAt: timestamp,
       _version: 1,
     };
@@ -64,10 +67,11 @@ exports.handler = async (event, context) => {
   };
 
   // check if user already exist
-  if (!isUserExist(newUser.id)) {
+  if (!(await isUserExist(newUser.id))) {
     // if not, save the user to database
+    console.log(`Adding new user in db with id ${newUser.id}`);
     await saveUser(newUser);
-    console.log(`User ${newUser.id} already exist`);
+    console.log(`User ${newUser.id} created`);
   } else {
     console.log(`User ${newUser.id} already exist`);
   }
