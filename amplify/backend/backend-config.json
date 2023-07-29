@@ -69,6 +69,17 @@
   "function": {
     "rninstagramPostConfirmation": {
       "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "rninstagram"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
