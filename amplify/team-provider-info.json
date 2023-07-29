@@ -21,6 +21,9 @@
           "deploymentBucketName": "amplify-rninstagram-staging-170549-deployment",
           "s3Key": "amplify-builds/rninstagramPostConfirmation-444b7231383267424c54-build.zip"
         }
+      },
+      "api": {
+        "rninstagram": {}
       }
     }
   }

@@ -13,11 +13,12 @@ import VideoPlayer from '../VideoPlayer/VideoPlayer';
 import DoublePress from '../DoublePressable';
 import Carousel from '../Carousel';
 
-import {IPost} from '../../types/model';
 import {FeedNavigationProp} from '../../types/navigation';
+import {Post} from '../../API';
+import {DEFAULT_USER_IMAGE} from '../../config';
 
 interface IFeedPost {
-  post: IPost;
+  post: Post;
   isVisible: boolean;
 }
 
@@ -37,7 +38,9 @@ const FeedPost = (props: IFeedPost) => {
   }
 
   function showUserProfile() {
-    navigation.navigate('UserProfile', {userId: post.user.id});
+    if (post?.User) {
+      navigation.navigate('UserProfile', {userId: post.User?.id});
+    }
   }
 
   function navigateToComments() {
@@ -73,12 +76,12 @@ const FeedPost = (props: IFeedPost) => {
       <View style={styles.header}>
         <Image
           source={{
-            uri: post.user.image,
+            uri: post.User?.image || DEFAULT_USER_IMAGE,
           }}
           style={styles.userAvatar}
         />
         <Text onPress={showUserProfile} style={styles.userName}>
-          {post.user.username}
+          {post.User?.username}
         </Text>
         <Entypo
           name="dots-three-horizontal"
@@ -126,7 +129,7 @@ const FeedPost = (props: IFeedPost) => {
         </Text>
         {/* Post Description */}
         <Text style={styles.text} numberOfLines={isDescriptionExpanded ? 0 : 3}>
-          <Text style={styles.bold}>{post.user.username}</Text>{' '}
+          <Text style={styles.bold}>{post.User?.username}</Text>{' '}
           {post.description}
         </Text>
         <Text onPress={toogleDescriptionExpanded}>
@@ -136,8 +139,8 @@ const FeedPost = (props: IFeedPost) => {
         <Text onPress={navigateToComments}>
           View all {post.nofComments} comments
         </Text>
-        {post.comments.map(comment => {
-          return <Comment key={comment.id} comment={comment} />;
+        {(post.Comments?.items || []).map(comment => {
+          return comment && <Comment key={comment.id} comment={comment} />;
         })}
         {/* Posted date */}
         <Text>{post.createdAt}</Text>
