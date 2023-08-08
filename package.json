@@ -10,6 +10,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.0",
     "@react-native-async-storage/async-storage": "^1.19.1",
     "@react-native-community/netinfo": "^9.4.1",
     "@react-native-picker/picker": "^2.4.10",
@@ -20,8 +21,11 @@
     "amazon-cognito-identity-js": "^6.3.1",
     "aws-amplify": "^5.3.5",
     "aws-amplify-react-native": "^7.0.2",
+    "aws-appsync-auth-link": "^3.0.7",
+    "aws-appsync-subscription-link": "^3.1.2",
     "expo": "^46.0.0",
     "expo-camera": "~12.3.0",
+    "graphql": "^14",
     "react": "18.1.0",
     "react-hook-form": "^7.36.0",
     "react-native": "0.70.1",

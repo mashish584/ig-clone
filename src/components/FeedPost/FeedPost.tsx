@@ -23,6 +23,7 @@ interface IFeedPost {
 }
 
 const FeedPost = (props: IFeedPost) => {
+  console.log(props.post.User?.id);
   const navigation = useNavigation<FeedNavigationProp>();
   const {post, isVisible} = props;
 
