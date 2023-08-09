@@ -1,13 +1,13 @@
 import {
   ActivityIndicator,
   FlatList,
+  Text,
+  View,
   ViewabilityConfig,
   ViewToken,
 } from 'react-native';
 import FeedPost from '../../components/FeedPost';
-import posts from '../../assets/data/posts.json';
-import {useEffect, useRef, useState} from 'react';
-import {API, graphqlOperation} from 'aws-amplify';
+import {useRef, useState} from 'react';
 import {useQuery} from '@apollo/client';
 import {listPosts} from './queries';
 import {ListPostsQuery, ListPostsQueryVariables} from '../../API';
@@ -51,12 +51,25 @@ const HomeScreen = () => {
 
   const posts = data?.listPosts?.items || [];
 
+  console.log(`Posts`, JSON.stringify({posts}, null, 2));
+
   return (
     <FlatList
       data={posts}
       viewabilityConfig={viewabilityConfig}
       onViewableItemsChanged={onViewableItemChange.current}
       showsVerticalScrollIndicator={false}
+      contentContainerStyle={{flex: 1}}
+      ListEmptyComponent={
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text>No Posts.</Text>
+        </View>
+      }
       renderItem={({item}) =>
         item && (
           <FeedPost post={item} isVisible={item.id === currentActivePost} />

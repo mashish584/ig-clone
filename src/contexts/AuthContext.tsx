@@ -16,12 +16,12 @@ type UserType = CognitoUser | null | undefined;
 
 type AuthContextType = {
   user: UserType;
-  setUser: Dispatch<SetStateAction<UserType>>;
+  userId: string;
 };
 
 const AuthContext = createContext<AuthContextType>({
   user: undefined,
-  setUser: () => {},
+  userId: '',
 });
 
 const AuthContextProvider = ({children}: {children: ReactNode}) => {
@@ -60,7 +60,7 @@ const AuthContextProvider = ({children}: {children: ReactNode}) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{user, setUser}}>
+    <AuthContext.Provider value={{user, userId: user?.attributes.sub}}>
       {children}
     </AuthContext.Provider>
   );
