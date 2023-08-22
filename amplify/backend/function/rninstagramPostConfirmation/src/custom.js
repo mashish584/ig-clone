@@ -31,6 +31,7 @@ const saveUser = async user => {
 
     const Item = {
       ...user,
+      username: user.email,
       nofPosts: 0,
       nofFollowers: 0,
       nofFollowings: 0,

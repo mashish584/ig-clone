@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, Image, Pressable} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {IComment} from '../../types/model';
 import styles, {colors} from './styles';
 import {Comment as CommentI} from '../../API';
 import {DEFAULT_USER_IMAGE} from '../../config';

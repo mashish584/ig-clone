@@ -2,14 +2,16 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
 import {colors, fonts} from '../../theme';
-import {IUser} from '../../types/model';
+import {User} from '../../API';
+import {DEFAULT_USER_IMAGE} from '../../config';
+import {UserProfileNavigationProp} from '../../types/navigation';
 
 interface IUserListItem {
-  user: Pick<IUser, 'image' | 'name' | 'username' | 'id'>;
+  user: Pick<User, 'image' | 'name' | 'username' | 'id'>;
 }
 
 const UserListItem = ({user}: IUserListItem) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<UserProfileNavigationProp>();
 
   const goToUserScreen = () => {
     navigation.navigate('UserProfile', {userId: user.id});
@@ -17,7 +19,10 @@ const UserListItem = ({user}: IUserListItem) => {
 
   return (
     <Pressable onPress={goToUserScreen} style={styles.root}>
-      <Image source={{uri: user.image}} style={styles.image} />
+      <Image
+        source={{uri: user.image || DEFAULT_USER_IMAGE}}
+        style={styles.image}
+      />
       <View>
         <Text>{user.name || 'Jon Doe'}</Text>
         <Text>{user.username}</Text>

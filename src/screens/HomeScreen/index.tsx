@@ -51,8 +51,6 @@ const HomeScreen = () => {
 
   const posts = data?.listPosts?.items || [];
 
-  console.log(`Posts`, JSON.stringify({posts}, null, 2));
-
   return (
     <FlatList
       data={posts}

@@ -8,12 +8,14 @@ import {ProfileNavigationProp} from '../../types/navigation';
 import styles from './styles';
 import {User} from '../../API';
 import {DEFAULT_USER_IMAGE} from '../../config';
+import {useAuthContext} from '../../contexts/AuthContext';
 
 interface ProfileHeaderI {
   user: User;
 }
 
 const ProfileHeader = ({user}: ProfileHeaderI) => {
+  const {userId} = useAuthContext();
   const navigation = useNavigation<ProfileNavigationProp>();
   return (
     <View style={styles.root}>
@@ -41,18 +43,21 @@ const ProfileHeader = ({user}: ProfileHeaderI) => {
       <Text style={styles.username}>{user.name}</Text>
       <Text>{user.bio}</Text>
 
-      <View style={styles.actionGroup}>
-        <Button
-          text="Edit Profile"
-          style={{flex: 0.49}}
-          onPress={() => navigation.navigate('Edit Profile')}
-        />
-        <Button
-          text="Sign Out"
-          style={{flex: 0.49}}
-          onPress={() => Auth.signOut()}
-        />
-      </View>
+      {user.id === userId && (
+        <View style={styles.actionGroup}>
+          <Button
+            text="Edit Profile"
+            style={{flex: 0.49}}
+            onPress={() => navigation.navigate('Edit Profile')}
+          />
+
+          <Button
+            text="Sign Out"
+            style={{flex: 0.49}}
+            onPress={() => Auth.signOut()}
+          />
+        </View>
+      )}
     </View>
   );
 };

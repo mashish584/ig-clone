@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, Text, Image} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {IPost} from '../../types/model';
 import {colors} from '../FeedPost/styles';
+import {Post} from '../../API';
 
 interface IFeedGridItem {
-  data: Pick<IPost, 'image' | 'images'>;
+  data: Pick<Post, 'image' | 'images'>;
 }
 
 const FeedGridItem = ({data}: IFeedGridItem) => {

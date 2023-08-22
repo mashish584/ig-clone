@@ -4,12 +4,11 @@ import FeedGridView from '../../components/FeedGridView';
 import ProfileHeader from './ProfileHeader';
 import {
   ProfileNavigationProp,
-  MyUserProfileNavigationProp,
+  MyProfileNavigationProp,
   MyProfileRouteProp,
   UserProfileRouteProp,
 } from '../../types/navigation';
 
-import user from '../../assets/data/users.json';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useQuery} from '@apollo/client';
 import {getUser} from './queries';
@@ -22,16 +21,16 @@ const ProfileScreen = () => {
   const route = useRoute<UserProfileRouteProp | MyProfileRouteProp>();
   const {userId: authUserId} = useAuthContext();
   const navigation = useNavigation<
-    ProfileNavigationProp | MyUserProfileNavigationProp
+    ProfileNavigationProp | MyProfileNavigationProp
   >();
 
   const userId = route.params?.userId || authUserId;
-  const {data, loading, error} = useQuery<GetUserQuery, GetUserQueryVariables>(
-    getUser,
-    {
-      variables: {id: userId},
-    },
-  );
+  const {data, loading, error, refetch} = useQuery<
+    GetUserQuery,
+    GetUserQueryVariables
+  >(getUser, {
+    variables: {id: userId},
+  });
 
   const user = data?.getUser;
 
@@ -44,6 +43,7 @@ const ProfileScreen = () => {
       <ApiErrorMessage
         title="Error fetching the user"
         message={error?.message || 'User not found.'}
+        onRetry={() => refetch()}
       />
     );
   }
@@ -52,6 +52,8 @@ const ProfileScreen = () => {
     <FeedGridView
       data={user?.Posts?.items || []}
       ListHeaderComponent={() => <ProfileHeader user={user} />}
+      refetch={refetch}
+      loading={loading}
     />
   );
 };
