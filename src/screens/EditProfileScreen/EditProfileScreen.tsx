@@ -1,17 +1,8 @@
 import React, {useEffect, useId, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TextInput,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
-import {useForm, Control, Controller} from 'react-hook-form';
+import {View, Text, Image, ActivityIndicator, Alert} from 'react-native';
+import {useForm} from 'react-hook-form';
 import {Asset, launchImageLibrary} from 'react-native-image-picker';
-import user from '../../assets/data/users.json';
-import {colors, fonts} from '../../theme';
+
 import {
   DeleteUserMutation,
   DeleteUserMutationVariables,
@@ -27,56 +18,12 @@ import {useAuthContext} from '../../contexts/AuthContext';
 import ApiErrorMessage from '../../components/ApiErrorMessage/ApiErrorMessage';
 import {useNavigation} from '@react-navigation/native';
 import {Auth} from 'aws-amplify';
+import CustomInput, {IEditableUser} from './CustomInput';
+import styles from './styles';
+import {DEFAULT_USER_IMAGE} from '../../config';
 
 const URL_REGEX =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
-
-type IEditableUser = Pick<User, 'name' | 'username' | 'website' | 'bio'>;
-
-interface ICustomInput {
-  label: string;
-  name: keyof IEditableUser;
-  control: Control<IEditableUser, object>;
-  rules?: object;
-  multiline?: boolean;
-}
-
-const CustomInput = (props: ICustomInput) => {
-  const {label, multiline, name, control, rules} = props;
-  return (
-    <Controller
-      control={control}
-      name={name}
-      rules={rules}
-      render={({field: {onChange, value, onBlur}, fieldState: {error}}) => {
-        return (
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>{label}</Text>
-            <View style={{flex: 1}}>
-              <TextInput
-                onChangeText={onChange}
-                onBlur={onBlur}
-                value={value || ''}
-                placeholder={label}
-                style={[
-                  styles.input,
-                  {borderColor: error?.type ? colors.accent : colors.border},
-                ]}
-                multiline={multiline}
-                autoCapitalize="none"
-              />
-              {error?.type && (
-                <Text style={{color: colors.accent}}>
-                  {error.message || 'Enter a valid value.'}
-                </Text>
-              )}
-            </View>
-          </View>
-        );
-      }}
-    />
-  );
-};
 
 const EditProfileScreen = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<null | Asset>(null);
@@ -174,7 +121,7 @@ const EditProfileScreen = () => {
   return (
     <View style={styles.page}>
       <Image
-        source={{uri: selectedPhoto?.uri || user.image}}
+        source={{uri: selectedPhoto?.uri || user?.image || DEFAULT_USER_IMAGE}}
         style={styles.avatar}
       />
       <Text onPress={onChangePhoto} style={styles.textButton}>
@@ -225,43 +172,5 @@ const EditProfileScreen = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  page: {
-    alignItems: 'center',
-    padding: 10,
-  },
-  avatar: {
-    width: '30%',
-    aspectRatio: 1,
-    borderRadius: 100,
-  },
-  textButton: {
-    color: colors.primary,
-    fontSize: fonts.size.md,
-    fontWeight: fonts.weight.semi,
-    margin: 10,
-  },
-  textButtonDanger: {
-    color: colors.accent,
-    fontSize: fonts.size.md,
-    fontWeight: fonts.weight.semi,
-    margin: 10,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'stretch',
-    marginBottom: 10,
-  },
-  label: {
-    width: 80,
-  },
-  input: {
-    borderColor: colors.border,
-    borderBottomWidth: 1,
-    minHeight: 50,
-  },
-});
 
 export default EditProfileScreen;
