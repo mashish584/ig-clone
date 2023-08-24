@@ -11,9 +11,11 @@ import {
   UpdateUserMutation,
   UpdateUserMutationVariables,
   User,
+  UsersByUsernameQuery,
+  UsersByUsernameQueryVariables,
 } from '../../API';
-import {useMutation, useQuery} from '@apollo/client';
-import {deleteUser, getUser, updateUser} from './queries';
+import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
+import {deleteUser, getUser, updateUser, usersByUsername} from './queries';
 import {useAuthContext} from '../../contexts/AuthContext';
 import ApiErrorMessage from '../../components/ApiErrorMessage/ApiErrorMessage';
 import {useNavigation} from '@react-navigation/native';
@@ -32,6 +34,10 @@ const EditProfileScreen = () => {
 
   const {userId, user: authUser} = useAuthContext();
 
+  const [getUserByUsername] = useLazyQuery<
+    UsersByUsernameQuery,
+    UsersByUsernameQueryVariables
+  >(usersByUsername);
   const {data, error, loading} = useQuery<GetUserQuery, GetUserQueryVariables>(
     getUser,
     {variables: {id: userId}},
@@ -64,8 +70,27 @@ const EditProfileScreen = () => {
       },
     });
 
-    navigation.goBack();
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
   }
+
+  const validateUsername = async (username: string) => {
+    try {
+      const response = await getUserByUsername({variables: {username}});
+      if (response.error) {
+        return 'Failed to fetch username';
+      }
+      const users = response.data?.usersByUsername?.items;
+      if (users?.length && username !== user?.username) {
+        return 'Username already taken.';
+      }
+    } catch (err) {
+      Alert.alert('Oops', 'Something went wrong.');
+    }
+
+    return true;
+  };
 
   const removeUser = async () => {
     if (!user) return;
@@ -142,6 +167,7 @@ const EditProfileScreen = () => {
             value: 3,
             message: 'Username should be more the 3 characters.',
           },
+          validate: validateUsername,
         }}
         control={control}
       />

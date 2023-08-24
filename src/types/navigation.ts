@@ -6,6 +6,7 @@ export type RootNavigatorParamList = {
   Auth: undefined;
   Home: undefined;
   Comments: {postId: string};
+  ProfileSetup: undefined;
 };
 
 export type BottomTabNavigatorParamList = {
@@ -14,6 +15,24 @@ export type BottomTabNavigatorParamList = {
   Upload: undefined;
   Notifications: undefined;
   MyProfile: undefined;
+};
+
+export type HomeStackNavigatorParamList = {
+  Feed: undefined;
+  UserProfile: {userId: string};
+};
+
+export type ProfileStackNavigatorParamList = {
+  Profile: undefined;
+  EditProfile: undefined;
+};
+
+export type AuthStackNavigatorParamList = {
+  'Sign in': undefined;
+  'Sign up': undefined;
+  'Confirm email': {email?: string};
+  'Forgot password': undefined;
+  'New password': undefined;
 };
 
 export type MyProfileNavigationProp = BottomTabNavigationProp<
@@ -25,11 +44,6 @@ export type MyProfileRouteProp = RouteProp<
   BottomTabNavigatorParamList,
   'MyProfile'
 >;
-
-export type HomeStackNavigatorParamList = {
-  Feed: undefined;
-  UserProfile: {userId: string};
-};
 
 export type UserProfileNavigationProp = NativeStackNavigationProp<
   HomeStackNavigatorParamList,
@@ -46,24 +60,10 @@ export type FeedNavigationProp = NativeStackNavigationProp<
   'Feed'
 >;
 
-export type ProfileStackNavigatorParamList = {
-  Profile: undefined;
-  'Edit Profile': undefined;
-};
-
 export type ProfileNavigationProp = NativeStackNavigationProp<
   ProfileStackNavigatorParamList,
   'Profile'
 >;
-
-// Auth Stack Navigator
-export type AuthStackNavigatorParamList = {
-  'Sign in': undefined;
-  'Sign up': undefined;
-  'Confirm email': {email?: string};
-  'Forgot password': undefined;
-  'New password': undefined;
-};
 
 export type SignInNavigationProp = NativeStackNavigationProp<
   AuthStackNavigatorParamList,

@@ -17,6 +17,7 @@ interface ProfileHeaderI {
 const ProfileHeader = ({user}: ProfileHeaderI) => {
   const {userId} = useAuthContext();
   const navigation = useNavigation<ProfileNavigationProp>();
+  navigation.setOptions({headerTitle: user.username || 'Profile'});
   return (
     <View style={styles.root}>
       <View style={styles.headerRow}>
@@ -36,11 +37,11 @@ const ProfileHeader = ({user}: ProfileHeaderI) => {
         </View>
         <View style={styles.numberContainer}>
           <Text style={styles.numberText}>{user?.nofFollowings}</Text>
-          <Text>Follwings</Text>
+          <Text>Followings</Text>
         </View>
       </View>
 
-      <Text style={styles.username}>{user.name}</Text>
+      <Text style={styles.username}>{user.username}</Text>
       <Text>{user.bio}</Text>
 
       {user.id === userId && (
@@ -48,7 +49,7 @@ const ProfileHeader = ({user}: ProfileHeaderI) => {
           <Button
             text="Edit Profile"
             style={{flex: 0.49}}
-            onPress={() => navigation.navigate('Edit Profile')}
+            onPress={() => navigation.navigate('EditProfile')}
           />
 
           <Button
