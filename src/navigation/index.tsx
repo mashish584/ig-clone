@@ -7,10 +7,11 @@ import {RootNavigatorParamList} from '../types/navigation';
 import AuthStackNavigator from './AuthStackNavigator';
 import {useAuthContext} from '../contexts/AuthContext';
 import {ActivityIndicator, View} from 'react-native';
-import {useQuery} from '@apollo/client';
+import {useLazyQuery, useQuery} from '@apollo/client';
 import {getUser} from './queries';
 import {GetUserQuery, GetUserQueryVariables} from '../API';
 import EditProfileScreen from '../screens/EditProfileScreen/EditProfileScreen';
+import {useEffect} from 'react';
 
 const Stack = createNativeStackNavigator<RootNavigatorParamList>();
 
@@ -37,11 +38,17 @@ const linking: LinkingOptions<RootNavigatorParamList> = {
 const Navigation = () => {
   let stackScreens = null;
   const {user, userId} = useAuthContext();
-  const {data, loading} = useQuery<GetUserQuery, GetUserQueryVariables>(
-    getUser,
-    {variables: {id: userId}},
-  );
+  const [fetchUserInfo, {data, loading}] = useLazyQuery<
+    GetUserQuery,
+    GetUserQueryVariables
+  >(getUser);
   const userData = data?.getUser;
+
+  useEffect(() => {
+    if (userId) {
+      fetchUserInfo({variables: {id: userId}});
+    }
+  }, [userId]);
 
   if (user === undefined || loading) {
     return (
