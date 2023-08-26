@@ -14,10 +14,22 @@ import DoublePress from '../DoublePressable';
 import Carousel from '../Carousel';
 
 import {FeedNavigationProp} from '../../types/navigation';
-import {Post} from '../../API';
+import {
+  CreateLikeMutation,
+  CreateLikeMutationVariables,
+  DeleteLikeMutation,
+  DeleteLikeMutationVariables,
+  LikesByPostQuery,
+  LikesByPostQueryVariables,
+  Post,
+  UpdatePostMutation,
+  UpdatePostMutationVariables,
+} from '../../API';
 import {DEFAULT_USER_IMAGE} from '../../config';
-import PopUpMenu from './PostMenu';
 import PostMenu from './PostMenu';
+import {useMutation, useQuery} from '@apollo/client';
+import {createLike, deleteLike, likesByPost, updatePost} from './queries';
+import {useAuthContext} from '../../contexts/AuthContext';
 
 interface IFeedPost {
   post: Post;
@@ -26,18 +38,84 @@ interface IFeedPost {
 }
 
 const FeedPost = (props: IFeedPost) => {
+  const {userId} = useAuthContext();
   const navigation = useNavigation<FeedNavigationProp>();
   const {post, isVisible} = props;
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [isPostLiked, setIsPostLiked] = useState(false);
+
+  const {data: likesData} = useQuery<
+    LikesByPostQuery,
+    LikesByPostQueryVariables
+  >(likesByPost, {
+    variables: {
+      postID: post.id,
+      userID: {eq: userId},
+      filter: {_deleted: {ne: true}},
+    },
+  });
+
+  const [submitLike] = useMutation<
+    CreateLikeMutation,
+    CreateLikeMutationVariables
+  >(createLike, {refetchQueries: ['LikesByPost']});
+
+  const [removeLike] = useMutation<
+    DeleteLikeMutation,
+    DeleteLikeMutationVariables
+  >(deleteLike, {refetchQueries: ['LikesByPost']});
+
+  const [updatePostLikesCount] = useMutation<
+    UpdatePostMutation,
+    UpdatePostMutationVariables
+  >(updatePost);
+
+  const userLike = likesData?.likesByPost?.items?.[0];
+  const postLikes = post.Likes?.items.filter(like => !like?._deleted) || [];
+  const firstUserToLike = postLikes?.[0]?.User;
+  const isLikedByAuthUser = firstUserToLike?.id === userId;
 
   function toogleDescriptionExpanded() {
     setIsDescriptionExpanded(!isDescriptionExpanded);
   }
 
-  function togglePostLike() {
-    setIsPostLiked(!isPostLiked);
+  const updateLikeCount = (type: 'add' | 'remove') => {
+    const value = type === 'add' ? 1 : -1;
+    const nofLikes =
+      post.nofLikes === 0 && type === 'remove' ? 0 : value + post.nofLikes;
+    updatePostLikesCount({
+      variables: {
+        input: {
+          id: post.id,
+          nofLikes,
+          _version: post._version,
+        },
+      },
+    });
+  };
+
+  async function togglePostLike() {
+    if (userLike) {
+      await removeLike({
+        variables: {
+          input: {
+            id: userLike.id,
+            _version: userLike._version,
+          },
+        },
+      });
+      updateLikeCount('remove');
+    } else {
+      submitLike({
+        variables: {
+          input: {
+            postID: post.id,
+            userID: userId,
+          },
+        },
+      });
+      updateLikeCount('add');
+    }
   }
 
   function showUserProfile() {
@@ -99,10 +177,10 @@ const FeedPost = (props: IFeedPost) => {
         <View style={styles.iconContainer}>
           <Pressable onPress={togglePostLike}>
             <AntDesign
-              name={isPostLiked ? 'heart' : 'hearto'}
+              name={userLike ? 'heart' : 'hearto'}
               size={24}
               style={styles.icon}
-              color={isPostLiked ? colors.accent : colors.black}
+              color={userLike ? colors.accent : colors.black}
             />
           </Pressable>
           <Ionicons
@@ -126,8 +204,33 @@ const FeedPost = (props: IFeedPost) => {
         </View>
         {/* Post likes */}
         <Text>
-          Liked by <Text style={styles.bold}>abc</Text> &{' '}
-          <Text style={styles.bold}>{post.nofLikes} others</Text>
+          {postLikes?.length === 0 ? (
+            <Text>Be the first to like this post.</Text>
+          ) : (
+            <>
+              Liked by{' '}
+              <Text
+                onPress={() => {
+                  if (!isLikedByAuthUser && firstUserToLike) {
+                    navigation.navigate('UserProfile', {
+                      userId: firstUserToLike?.id,
+                    });
+                  }
+                }}
+                style={styles.bold}>
+                {isLikedByAuthUser ? 'you' : postLikes[0]?.User?.username}
+              </Text>
+              {postLikes.length > 1 && (
+                <Text
+                  onPress={() =>
+                    navigation.navigate('PostLikes', {id: post.id})
+                  }
+                  style={styles.bold}>
+                  & {post.nofLikes} others
+                </Text>
+              )}
+            </>
+          )}
         </Text>
         {/* Post Description */}
         <Text style={styles.text} numberOfLines={isDescriptionExpanded ? 0 : 3}>

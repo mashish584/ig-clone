@@ -282,16 +282,18 @@ export const likesByUserID = /* GraphQL */ `
     }
   }
 `;
-export const likesByPostID = /* GraphQL */ `
-  query LikesByPostID(
+export const likesByPost = /* GraphQL */ `
+  query LikesByPost(
     $postID: ID!
+    $userID: ModelIDKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelLikeFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    likesByPostID(
+    likesByPost(
       postID: $postID
+      userID: $userID
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit

@@ -21,6 +21,7 @@ export type HomeStackNavigatorParamList = {
   Feed: undefined;
   UserProfile: {userId: string};
   UpdatePost: {id: string};
+  PostLikes: {id: string};
 };
 
 export type ProfileStackNavigatorParamList = {
@@ -48,6 +49,11 @@ export type AuthStackNavigatorParamList = {
 export type MyProfileNavigationProp = BottomTabNavigationProp<
   BottomTabNavigatorParamList,
   'MyProfile'
+>;
+
+export type PostLikesRouteProp = RouteProp<
+  HomeStackNavigatorParamList,
+  'PostLikes'
 >;
 
 export type MyProfileRouteProp = RouteProp<
