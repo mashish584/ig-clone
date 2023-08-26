@@ -10,6 +10,8 @@ import {
 } from 'expo-camera';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {colors} from '../../theme';
+import {useNavigation} from '@react-navigation/native';
+import {CameraNavigationProp} from '../../types/navigation';
 
 const flashModes = [
   FlashMode.off,
@@ -25,7 +27,9 @@ const flashModeToIcon = {
   [FlashMode.torch]: 'highlight',
 };
 
-const PostUploadScreen = () => {
+const CameraScreen = () => {
+  const navigation = useNavigation<CameraNavigationProp>();
+
   const [hasPermissions, setHasPermissions] = useState<boolean | null>(null);
   const [cameraType, setCameraType] = useState(CameraType.back);
   const [flash, setFlash] = useState(FlashMode.off);
@@ -154,6 +158,20 @@ const PostUploadScreen = () => {
             color={colors.white}
           />
         </Pressable>
+        <Pressable
+          onPress={() =>
+            navigation.navigate('UploadPost', {
+              image: 'https://unsplash.it/1000/1000',
+              images: null,
+              video: null,
+            })
+          }>
+          <MaterialIcons
+            name="arrow-forward-ios"
+            size={30}
+            color={colors.white}
+          />
+        </Pressable>
       </View>
     </View>
   );
@@ -185,4 +203,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostUploadScreen;
+export default CameraScreen;

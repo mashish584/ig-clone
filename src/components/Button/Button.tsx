@@ -1,17 +1,35 @@
 import React from 'react';
-import {View, Text, Pressable, StyleSheet, ViewStyle} from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 import {colors, fonts} from '../FeedPost/styles';
 
 interface IButton {
   text?: string;
   onPress?: () => void;
   style?: ViewStyle;
+  textStyle?: TextStyle;
+  disabled?: boolean;
 }
 
-const Button = ({text = '', onPress = () => {}, style}: IButton) => {
+const Button = ({
+  text = '',
+  onPress = () => {},
+  style,
+  textStyle,
+  disabled,
+}: IButton) => {
   return (
-    <Pressable style={[styles.container, style]} onPress={onPress}>
-      <Text style={styles.text}>{text}</Text>
+    <Pressable
+      style={[styles.container, disabled && {opacity: 0.5}, style]}
+      onPress={onPress}
+      disabled={disabled}>
+      <Text style={[styles.text, textStyle]}>{text}</Text>
     </Pressable>
   );
 };

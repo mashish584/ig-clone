@@ -18,10 +18,10 @@ const viewabilityConfig: ViewabilityConfig = {
 };
 
 const HomeScreen = () => {
-  const {data, loading, error} = useQuery<
+  const {data, loading, error, refetch} = useQuery<
     ListPostsQuery,
     ListPostsQueryVariables
-  >(listPosts);
+  >(listPosts, {variables: {filter: {_deleted: {ne: true}}}});
   const [currentActivePost, setCurrentActivePost] = useState<string | null>(
     null,
   );
@@ -57,7 +57,9 @@ const HomeScreen = () => {
       viewabilityConfig={viewabilityConfig}
       onViewableItemsChanged={onViewableItemChange.current}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{flex: 1}}
+      contentContainerStyle={{flexGrow: 1}}
+      onRefresh={refetch}
+      refreshing={loading}
       ListEmptyComponent={
         <View
           style={{
@@ -70,7 +72,11 @@ const HomeScreen = () => {
       }
       renderItem={({item}) =>
         item && (
-          <FeedPost post={item} isVisible={item.id === currentActivePost} />
+          <FeedPost
+            post={item}
+            isVisible={item.id === currentActivePost}
+            onPostUpdate={refetch}
+          />
         )
       }
     />

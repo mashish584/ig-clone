@@ -19,9 +19,6 @@ const styles = StyleSheet.create({
     fontWeight: fonts.weight.bold,
     color: colors.black,
   },
-  threeDots: {
-    marginLeft: 'auto',
-  },
   image: {
     width: '100%',
     aspectRatio: 1,

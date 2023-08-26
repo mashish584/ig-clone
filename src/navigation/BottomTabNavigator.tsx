@@ -3,15 +3,14 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import HomeScreen from '../screens/HomeScreen';
-import PostUploadScreen from '../screens/PostUploadScreen';
-
 import HomeStackNavigator from './HomeStackNavigator';
 import ProfileStackNavigator from './ProfileStackNavigator';
 
 import {colors} from '../theme';
 import {BottomTabNavigatorParamList} from '../types/navigation';
 import SearchTabNavigator from './SearchTabNavigator';
+import PostUploadStackNavigator from './PostUploadStackNavigator';
+import {CameraScreen} from '../screens/CameraScreen';
 
 const Tab = createBottomTabNavigator<BottomTabNavigatorParamList>();
 
@@ -44,8 +43,8 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Upload"
-        component={PostUploadScreen}
+        name="CreatePost"
+        component={PostUploadStackNavigator}
         options={{
           headerShown: false,
           tabBarIcon: ({color, size}) => (
@@ -59,7 +58,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen
         name="Notifications"
-        component={PostUploadScreen}
+        component={CameraScreen}
         options={{
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons
@@ -71,7 +70,7 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="ProfileStack"
+        name="MyProfile"
         component={ProfileStackNavigator}
         options={{
           headerShown: false,

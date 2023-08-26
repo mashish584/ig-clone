@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {Image, Pressable, Text, View} from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
+
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -16,10 +16,13 @@ import Carousel from '../Carousel';
 import {FeedNavigationProp} from '../../types/navigation';
 import {Post} from '../../API';
 import {DEFAULT_USER_IMAGE} from '../../config';
+import PopUpMenu from './PostMenu';
+import PostMenu from './PostMenu';
 
 interface IFeedPost {
   post: Post;
   isVisible: boolean;
+  onPostUpdate: () => void;
 }
 
 const FeedPost = (props: IFeedPost) => {
@@ -83,10 +86,9 @@ const FeedPost = (props: IFeedPost) => {
         <Text onPress={showUserProfile} style={styles.userName}>
           {post.User?.username}
         </Text>
-        <Entypo
-          name="dots-three-horizontal"
-          size={16}
-          style={styles.threeDots}
+        <PostMenu
+          post={{id: post.id, userID: post.userID, _version: post._version}}
+          onDeleteCallback={props.onPostUpdate}
         />
       </View>
       {/* Content */}

@@ -1,4 +1,5 @@
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {MenuProvider} from 'react-native-popup-menu';
 import {Amplify} from 'aws-amplify';
 
 import config from './src/aws-exports';
@@ -13,7 +14,9 @@ const App = () => {
     <SafeAreaProvider>
       <AuthContextProvider>
         <Client>
-          <Navigation />
+          <MenuProvider>
+            <Navigation />
+          </MenuProvider>
         </Client>
       </AuthContextProvider>
     </SafeAreaProvider>

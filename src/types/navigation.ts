@@ -12,7 +12,7 @@ export type RootNavigatorParamList = {
 export type BottomTabNavigatorParamList = {
   HomeStack: undefined;
   Search: undefined;
-  Upload: undefined;
+  CreatePost: undefined;
   Notifications: undefined;
   MyProfile: undefined;
 };
@@ -20,11 +20,21 @@ export type BottomTabNavigatorParamList = {
 export type HomeStackNavigatorParamList = {
   Feed: undefined;
   UserProfile: {userId: string};
+  UpdatePost: {id: string};
 };
 
 export type ProfileStackNavigatorParamList = {
   Profile: undefined;
   EditProfile: undefined;
+};
+
+export type PostUploadNavigatorParamList = {
+  Camera: undefined;
+  UploadPost: {
+    image: string | null;
+    images: string[] | null;
+    video: string | null;
+  };
 };
 
 export type AuthStackNavigatorParamList = {
@@ -53,6 +63,24 @@ export type UserProfileNavigationProp = NativeStackNavigationProp<
 export type UserProfileRouteProp = RouteProp<
   HomeStackNavigatorParamList,
   'UserProfile'
+>;
+
+export type UpdatePostRouteProp = RouteProp<
+  HomeStackNavigatorParamList,
+  'UpdatePost'
+>;
+
+export type CameraNavigationProp = NativeStackNavigationProp<
+  PostUploadNavigatorParamList,
+  'Camera'
+>;
+export type UploadNavigationProp = NativeStackNavigationProp<
+  PostUploadNavigatorParamList,
+  'UploadPost'
+>;
+export type UploadRouteProp = RouteProp<
+  PostUploadNavigatorParamList,
+  'UploadPost'
 >;
 
 export type FeedNavigationProp = NativeStackNavigationProp<
