@@ -56,6 +56,8 @@ export type PostLikesRouteProp = RouteProp<
   'PostLikes'
 >;
 
+export type CommentRouteProp = RouteProp<RootNavigatorParamList, 'Comments'>;
+
 export type MyProfileRouteProp = RouteProp<
   BottomTabNavigatorParamList,
   'MyProfile'

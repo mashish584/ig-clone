@@ -8,13 +8,19 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {colors, fonts} from '../../theme';
+import {useRoute} from '@react-navigation/native';
 
-const Input = () => {
+interface Input {
+  onPost: (comment: string) => void;
+}
+
+const Input = (props: Input) => {
   const [newComment, setNewComment] = useState('');
 
-  function onPost() {
-    console.log('Submit Comment');
-  }
+  const onCommentPost = async () => {
+    await props.onPost(newComment);
+    setNewComment('');
+  };
 
   return (
     <View style={styles.root}>
@@ -32,7 +38,7 @@ const Input = () => {
         onChangeText={setNewComment}
         multiline={true}
       />
-      <Pressable onPress={onPost} style={styles.action}>
+      <Pressable onPress={onCommentPost} style={styles.action}>
         <Text style={styles.text}>POST</Text>
       </Pressable>
     </View>

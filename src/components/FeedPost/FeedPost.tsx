@@ -168,9 +168,12 @@ const FeedPost = (props: IFeedPost) => {
           Show {isDescriptionExpanded ? 'less' : 'more'}
         </Text>
         {/* Post comments */}
-        <Text onPress={navigateToComments}>
-          View all {post.nofComments} comments
-        </Text>
+        {post?.nofComments > 2 && (
+          <Text onPress={navigateToComments}>
+            View all {post.nofComments}{' '}
+            {post.nofComments > 1 ? 'comments' : 'comment'}
+          </Text>
+        )}
         {(post.Comments?.items || []).map(comment => {
           return comment && <Comment key={comment.id} comment={comment} />;
         })}
