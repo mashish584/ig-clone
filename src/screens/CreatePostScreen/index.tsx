@@ -22,7 +22,7 @@ const CreatePostScreen = () => {
   const [uploadPost, {loading}] = useMutation<
     CreatePostMutation,
     CreatePostMutationVariables
-  >(createPost);
+  >(createPost, {refetchQueries: ['PostsByDate']});
 
   let mediaContent = null;
 
@@ -45,6 +45,7 @@ const CreatePostScreen = () => {
       await uploadPost({
         variables: {
           input: {
+            type: 'Post',
             description,
             image,
             images,

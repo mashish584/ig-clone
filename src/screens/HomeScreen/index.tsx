@@ -10,7 +10,11 @@ import FeedPost from '../../components/FeedPost';
 import {useRef, useState} from 'react';
 import {useQuery} from '@apollo/client';
 import {listPosts} from './queries';
-import {ListPostsQuery, ListPostsQueryVariables} from '../../API';
+import {
+  ModelSortDirection,
+  PostsByDateQuery,
+  PostsByDateQueryVariables,
+} from '../../API';
 import ApiErrorMessage from '../../components/ApiErrorMessage/ApiErrorMessage';
 
 const viewabilityConfig: ViewabilityConfig = {
@@ -19,9 +23,11 @@ const viewabilityConfig: ViewabilityConfig = {
 
 const HomeScreen = () => {
   const {data, loading, error, refetch} = useQuery<
-    ListPostsQuery,
-    ListPostsQueryVariables
-  >(listPosts, {variables: {filter: {_deleted: {ne: true}}}});
+    PostsByDateQuery,
+    PostsByDateQueryVariables
+  >(listPosts, {
+    variables: {type: 'Post', sortDirection: ModelSortDirection.DESC},
+  });
   const [currentActivePost, setCurrentActivePost] = useState<string | null>(
     null,
   );
@@ -49,7 +55,7 @@ const HomeScreen = () => {
     );
   }
 
-  const posts = data?.listPosts?.items || [];
+  const posts = data?.postsByDate?.items || [];
 
   return (
     <FlatList

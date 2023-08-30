@@ -74,7 +74,7 @@ const UpdatePostScreen = () => {
         _version: post._version,
         description,
       };
-      const response = await updatePostInfo({
+      await updatePostInfo({
         variables: {
           input: payload,
         },

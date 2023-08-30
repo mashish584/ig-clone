@@ -5,6 +5,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import dayjs from 'dayjs';
 
 import styles, {colors} from './styles';
 
@@ -168,17 +169,17 @@ const FeedPost = (props: IFeedPost) => {
           Show {isDescriptionExpanded ? 'less' : 'more'}
         </Text>
         {/* Post comments */}
-        {post?.nofComments > 2 && (
-          <Text onPress={navigateToComments}>
-            View all {post.nofComments}{' '}
-            {post.nofComments > 1 ? 'comments' : 'comment'}
-          </Text>
-        )}
+
+        <Text onPress={navigateToComments}>
+          View all {post.nofComments}{' '}
+          {post.nofComments > 1 ? 'comments' : 'comment'}
+        </Text>
+
         {(post.Comments?.items || []).map(comment => {
           return comment && <Comment key={comment.id} comment={comment} />;
         })}
         {/* Posted date */}
-        <Text>{post.createdAt}</Text>
+        <Text>{dayjs(post.createdAt).fromNow()}</Text>
       </View>
     </View>
   );

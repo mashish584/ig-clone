@@ -49,6 +49,8 @@ export const onCreateLike = /* GraphQL */ `
         images
         nofComments
         nofLikes
+        createdAt
+        type
         userID
         User {
           id
@@ -78,7 +80,6 @@ export const onCreateLike = /* GraphQL */ `
           startedAt
           __typename
         }
-        createdAt
         updatedAt
         _version
         _deleted
@@ -141,6 +142,8 @@ export const onUpdateLike = /* GraphQL */ `
         images
         nofComments
         nofLikes
+        createdAt
+        type
         userID
         User {
           id
@@ -170,7 +173,6 @@ export const onUpdateLike = /* GraphQL */ `
           startedAt
           __typename
         }
-        createdAt
         updatedAt
         _version
         _deleted
@@ -233,6 +235,8 @@ export const onDeleteLike = /* GraphQL */ `
         images
         nofComments
         nofLikes
+        createdAt
+        type
         userID
         User {
           id
@@ -262,7 +266,6 @@ export const onDeleteLike = /* GraphQL */ `
           startedAt
           __typename
         }
-        createdAt
         updatedAt
         _version
         _deleted
@@ -283,6 +286,7 @@ export const onCreateComment = /* GraphQL */ `
     onCreateComment(filter: $filter) {
       id
       comment
+      createdAt
       userID
       postID
       User {
@@ -326,6 +330,8 @@ export const onCreateComment = /* GraphQL */ `
         images
         nofComments
         nofLikes
+        createdAt
+        type
         userID
         User {
           id
@@ -355,14 +361,12 @@ export const onCreateComment = /* GraphQL */ `
           startedAt
           __typename
         }
-        createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
         __typename
       }
-      createdAt
       updatedAt
       _version
       _deleted
@@ -376,6 +380,7 @@ export const onUpdateComment = /* GraphQL */ `
     onUpdateComment(filter: $filter) {
       id
       comment
+      createdAt
       userID
       postID
       User {
@@ -419,6 +424,8 @@ export const onUpdateComment = /* GraphQL */ `
         images
         nofComments
         nofLikes
+        createdAt
+        type
         userID
         User {
           id
@@ -448,14 +455,12 @@ export const onUpdateComment = /* GraphQL */ `
           startedAt
           __typename
         }
-        createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
         __typename
       }
-      createdAt
       updatedAt
       _version
       _deleted
@@ -469,6 +474,7 @@ export const onDeleteComment = /* GraphQL */ `
     onDeleteComment(filter: $filter) {
       id
       comment
+      createdAt
       userID
       postID
       User {
@@ -512,6 +518,8 @@ export const onDeleteComment = /* GraphQL */ `
         images
         nofComments
         nofLikes
+        createdAt
+        type
         userID
         User {
           id
@@ -541,14 +549,12 @@ export const onDeleteComment = /* GraphQL */ `
           startedAt
           __typename
         }
-        createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
         __typename
       }
-      createdAt
       updatedAt
       _version
       _deleted
@@ -567,6 +573,8 @@ export const onCreatePost = /* GraphQL */ `
       images
       nofComments
       nofLikes
+      createdAt
+      type
       userID
       User {
         id
@@ -605,9 +613,9 @@ export const onCreatePost = /* GraphQL */ `
         items {
           id
           comment
+          createdAt
           userID
           postID
-          createdAt
           updatedAt
           _version
           _deleted
@@ -634,7 +642,6 @@ export const onCreatePost = /* GraphQL */ `
         startedAt
         __typename
       }
-      createdAt
       updatedAt
       _version
       _deleted
@@ -653,6 +660,8 @@ export const onUpdatePost = /* GraphQL */ `
       images
       nofComments
       nofLikes
+      createdAt
+      type
       userID
       User {
         id
@@ -691,9 +700,9 @@ export const onUpdatePost = /* GraphQL */ `
         items {
           id
           comment
+          createdAt
           userID
           postID
-          createdAt
           updatedAt
           _version
           _deleted
@@ -720,7 +729,6 @@ export const onUpdatePost = /* GraphQL */ `
         startedAt
         __typename
       }
-      createdAt
       updatedAt
       _version
       _deleted
@@ -739,6 +747,8 @@ export const onDeletePost = /* GraphQL */ `
       images
       nofComments
       nofLikes
+      createdAt
+      type
       userID
       User {
         id
@@ -777,9 +787,9 @@ export const onDeletePost = /* GraphQL */ `
         items {
           id
           comment
+          createdAt
           userID
           postID
-          createdAt
           updatedAt
           _version
           _deleted
@@ -806,7 +816,6 @@ export const onDeletePost = /* GraphQL */ `
         startedAt
         __typename
       }
-      createdAt
       updatedAt
       _version
       _deleted
@@ -835,8 +844,9 @@ export const onCreateUser = /* GraphQL */ `
           images
           nofComments
           nofLikes
-          userID
           createdAt
+          type
+          userID
           updatedAt
           _version
           _deleted
@@ -851,9 +861,9 @@ export const onCreateUser = /* GraphQL */ `
         items {
           id
           comment
+          createdAt
           userID
           postID
-          createdAt
           updatedAt
           _version
           _deleted
@@ -911,8 +921,9 @@ export const onUpdateUser = /* GraphQL */ `
           images
           nofComments
           nofLikes
-          userID
           createdAt
+          type
+          userID
           updatedAt
           _version
           _deleted
@@ -927,9 +938,9 @@ export const onUpdateUser = /* GraphQL */ `
         items {
           id
           comment
+          createdAt
           userID
           postID
-          createdAt
           updatedAt
           _version
           _deleted
@@ -987,8 +998,9 @@ export const onDeleteUser = /* GraphQL */ `
           images
           nofComments
           nofLikes
-          userID
           createdAt
+          type
+          userID
           updatedAt
           _version
           _deleted
@@ -1003,9 +1015,9 @@ export const onDeleteUser = /* GraphQL */ `
         items {
           id
           comment
+          createdAt
           userID
           postID
-          createdAt
           updatedAt
           _version
           _deleted

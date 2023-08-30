@@ -43,30 +43,30 @@ export declare const Like: (new (init: ModelInit<Like>) => Like) & {
 type EagerComment = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Comment, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    readOnlyFields: 'updatedAt';
   };
   readonly id: string;
   readonly comment: string;
+  readonly createdAt: string;
   readonly userID: string;
   readonly postID: string;
   readonly User?: User | null;
   readonly Post?: Post | null;
-  readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
 type LazyComment = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Comment, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    readOnlyFields: 'updatedAt';
   };
   readonly id: string;
   readonly comment: string;
+  readonly createdAt: string;
   readonly userID: string;
   readonly postID: string;
   readonly User: AsyncItem<User | undefined>;
   readonly Post: AsyncItem<Post | undefined>;
-  readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
@@ -79,7 +79,7 @@ export declare const Comment: (new (init: ModelInit<Comment>) => Comment) & {
 type EagerPost = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Post, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    readOnlyFields: 'updatedAt';
   };
   readonly id: string;
   readonly description?: string | null;
@@ -88,18 +88,19 @@ type EagerPost = {
   readonly images?: string[] | null;
   readonly nofComments: number;
   readonly nofLikes: number;
+  readonly createdAt: string;
+  readonly type: string;
   readonly userID: string;
   readonly User?: User | null;
   readonly Comments?: (Comment | null)[] | null;
   readonly Likes?: (Like | null)[] | null;
-  readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
 type LazyPost = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Post, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    readOnlyFields: 'updatedAt';
   };
   readonly id: string;
   readonly description?: string | null;
@@ -108,11 +109,12 @@ type LazyPost = {
   readonly images?: string[] | null;
   readonly nofComments: number;
   readonly nofLikes: number;
+  readonly createdAt: string;
+  readonly type: string;
   readonly userID: string;
   readonly User: AsyncItem<User | undefined>;
   readonly Comments: AsyncCollection<Comment>;
   readonly Likes: AsyncCollection<Like>;
-  readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 

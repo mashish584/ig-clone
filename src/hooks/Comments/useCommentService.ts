@@ -1,17 +1,23 @@
 import {Alert} from 'react-native';
 import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
 import {
-  CommentsByPostIDQuery,
-  CommentsByPostIDQueryVariables,
+  CommentsByPostIDAndCreatedAtQuery,
+  CommentsByPostIDAndCreatedAtQueryVariables,
   CreateCommentMutation,
   CreateCommentMutationVariables,
   GetPostQuery,
   GetPostQueryVariables,
+  ModelSortDirection,
   UpdatePostMutation,
   UpdatePostMutationVariables,
 } from '../../API';
 import {useAuthContext} from '../../contexts/AuthContext';
-import {commentsByPostID, createComment, getPost, updatePost} from './queries';
+import {
+  commentsByPostIDAndCreatedAt,
+  createComment,
+  getPost,
+  updatePost,
+} from './queries';
 
 const useCommentService = (postId: string) => {
   const {userId} = useAuthContext();
@@ -20,10 +26,12 @@ const useCommentService = (postId: string) => {
     loading: isCommentLoading,
     error: commentListingError,
     refetch: refetchComments,
-  } = useQuery<CommentsByPostIDQuery, CommentsByPostIDQueryVariables>(
-    commentsByPostID,
-    {variables: {postID: postId}},
-  );
+  } = useQuery<
+    CommentsByPostIDAndCreatedAtQuery,
+    CommentsByPostIDAndCreatedAtQueryVariables
+  >(commentsByPostIDAndCreatedAt, {
+    variables: {postID: postId, sortDirection: ModelSortDirection.DESC},
+  });
 
   const [getPostInfo] = useLazyQuery<GetPostQuery, GetPostQueryVariables>(
     getPost,
@@ -65,7 +73,7 @@ const useCommentService = (postId: string) => {
 
   const submitComment = async (comment: string) => {
     try {
-      const response = await onCommentCreate({
+      await onCommentCreate({
         variables: {
           input: {
             postID: postId,
@@ -73,7 +81,7 @@ const useCommentService = (postId: string) => {
             comment: comment,
           },
         },
-        refetchQueries: ['CommentsByPostID'],
+        refetchQueries: ['CommentsByPostIDAndCreatedAt'],
       });
       updateCommentCount('add');
     } catch (err) {
@@ -82,7 +90,7 @@ const useCommentService = (postId: string) => {
   };
 
   return {
-    comments: comments?.commentsByPostID?.items,
+    comments: comments?.commentsByPostIDAndCreatedAt?.items || [],
     isCommentLoading,
     commentListingError,
     refetchComments,

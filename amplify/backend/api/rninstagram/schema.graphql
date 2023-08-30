@@ -11,8 +11,9 @@ type Like @model @auth(rules: [{allow: public}]) {
 type Comment @model @auth(rules: [{allow: public}]) {
   id: ID!
   comment: String!
+  createdAt: AWSDateTime!
   userID: ID! @index(name: "byUser")
-  postID: ID! @index(name: "byPost")
+  postID: ID! @index(name: "byPost", sortKeyFields: ["createdAt"])
 
   User: User @belongsTo(fields: ["userID"])
   Post: Post @belongsTo(fields: ["postID"])
@@ -26,6 +27,14 @@ type Post @model @auth(rules: [{allow: public}]) {
   images: [String!]
   nofComments: Int!
   nofLikes: Int!
+  createdAt: AWSDateTime!
+  type: String!
+    @default(value: "Post")
+    @index(
+      name: "postsByDate"
+      queryField: "postsByDate"
+      sortKeyFields: ["createdAt"]
+    )
   userID: ID! @index(name: "byUser")
   User: User @belongsTo(fields: ["userID"])
   Comments: [Comment] @hasMany(indexName: "byPost", fields: ["id"])
