@@ -29,6 +29,14 @@ const link = ApolloLink.from([
   createSubscriptionHandshakeLink({url, region, auth}, httpLink),
 ]);
 
+const merge = (existing = {items: []}, incoming = {items: []}) => {
+  return {
+    ...existing,
+    ...incoming,
+    items: [...(existing.items || []), ...incoming.items],
+  };
+};
+
 const typePolicies: TypePolicies = {
   Query: {
     fields: {
@@ -41,6 +49,10 @@ const typePolicies: TypePolicies = {
             items: [...(existing.items || []), ...incoming.items],
           };
         },
+      },
+      postsByDate: {
+        keyArgs: ['type', 'createdAt', 'sortDirection', 'filter'],
+        merge,
       },
     },
   },

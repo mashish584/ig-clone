@@ -22,12 +22,14 @@ const viewabilityConfig: ViewabilityConfig = {
 };
 
 const HomeScreen = () => {
-  const {data, loading, error, refetch} = useQuery<
+  const isMorePostsLoading = useRef(false);
+  const {data, loading, error, refetch, fetchMore} = useQuery<
     PostsByDateQuery,
     PostsByDateQueryVariables
   >(listPosts, {
-    variables: {type: 'Post', sortDirection: ModelSortDirection.DESC},
+    variables: {type: 'Post', sortDirection: ModelSortDirection.DESC, limit: 2},
   });
+
   const [currentActivePost, setCurrentActivePost] = useState<string | null>(
     null,
   );
@@ -41,6 +43,17 @@ const HomeScreen = () => {
       setCurrentActivePost(viewableItems[0].item.id);
     }
   });
+
+  const nextToken = data?.postsByDate?.nextToken;
+
+  const loadMorePosts = async () => {
+    if (!nextToken || isMorePostsLoading.current) {
+      return;
+    }
+    isMorePostsLoading.current = true;
+    await fetchMore({variables: {nextToken}});
+    isMorePostsLoading.current = false;
+  };
 
   if (loading) {
     return <ActivityIndicator />;
@@ -85,6 +98,7 @@ const HomeScreen = () => {
           />
         )
       }
+      onEndReached={loadMorePosts}
     />
   );
 };
