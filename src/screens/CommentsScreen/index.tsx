@@ -19,6 +19,7 @@ const CommentsScreen = () => {
     isCommentLoading,
     refetchComments,
     createComment,
+    loadMoreComments,
   } = useCommentService(postId);
 
   if (commentListingError) {
@@ -42,7 +43,9 @@ const CommentsScreen = () => {
         }
         style={{padding: 10}}
         refreshing={isCommentLoading}
+        onEndReachedThreshold={0.8}
         onRefresh={refetchComments}
+        onEndReached={loadMoreComments}
         showsVerticalScrollIndicator={false}
       />
       <View style={{marginBottom: bottom}}>

@@ -18,19 +18,26 @@ import {
   getPost,
   updatePost,
 } from './queries';
+import {useRef} from 'react';
 
 const useCommentService = (postId: string) => {
+  const isLoadingMoreComments = useRef(false);
   const {userId} = useAuthContext();
   const {
     data: comments,
     loading: isCommentLoading,
     error: commentListingError,
     refetch: refetchComments,
+    fetchMore,
   } = useQuery<
     CommentsByPostIDAndCreatedAtQuery,
     CommentsByPostIDAndCreatedAtQueryVariables
   >(commentsByPostIDAndCreatedAt, {
-    variables: {postID: postId, sortDirection: ModelSortDirection.DESC},
+    variables: {
+      postID: postId,
+      sortDirection: ModelSortDirection.DESC,
+      limit: 2,
+    },
   });
 
   const [getPostInfo] = useLazyQuery<GetPostQuery, GetPostQueryVariables>(
@@ -49,6 +56,8 @@ const useCommentService = (postId: string) => {
     UpdatePostMutation,
     UpdatePostMutationVariables
   >(updatePost);
+
+  const nextToken = comments?.commentsByPostIDAndCreatedAt?.nextToken;
 
   const updateCommentCount = async (type: 'add' | 'remove') => {
     const response = await getPostInfo();
@@ -89,11 +98,21 @@ const useCommentService = (postId: string) => {
     }
   };
 
+  const loadMoreComments = async () => {
+    if (!nextToken || isLoadingMoreComments.current) {
+      return;
+    }
+    isLoadingMoreComments.current = true;
+    await fetchMore({variables: {nextToken}});
+    isLoadingMoreComments.current = false;
+  };
+
   return {
     comments: comments?.commentsByPostIDAndCreatedAt?.items || [],
     isCommentLoading,
     commentListingError,
     refetchComments,
+    loadMoreComments,
     createComment: submitComment,
   };
 };
