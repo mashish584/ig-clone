@@ -34,6 +34,17 @@ const styles = StyleSheet.create({
   footerText: {
     marginRight: 5,
   },
+  newContainer: {
+    marginRight: 5,
+    paddingVertical: 3,
+    paddingHorizontal: 5,
+    backgroundColor: colors.primary,
+    borderRadius: 10,
+  },
+  newLabel: {
+    fontSize: 10,
+    color: colors.white,
+  },
 });
 
 export default styles;

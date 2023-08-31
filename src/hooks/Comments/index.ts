@@ -1,1 +1,2 @@
-export {default} from './useCommentService';
+export {default as useCommentService} from './useCommentService';
+export {onNewComment} from "./queries";

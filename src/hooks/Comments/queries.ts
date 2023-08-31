@@ -67,6 +67,12 @@ export const createComment = gql`
           nextToken
           startedAt
         }
+        User {
+          id
+          image
+          name
+          username
+        }
         createdAt
         updatedAt
         _version
@@ -104,6 +110,50 @@ export const getPost = gql`
     getPost(id: $id) {
       id
       nofComments
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+
+export const onNewComment = gql`
+  subscription OnNewComment($postID: ID!) {
+    onNewComment(postID: $postID) {
+      id
+      comment
+      userID
+      postID
+      Post {
+        id
+        nofComments
+        Comments(limit: 2) {
+          items {
+            id
+            comment
+            User {
+              id
+              name
+              username
+            }
+          }
+          nextToken
+          startedAt
+        }
+        User {
+          id
+          image
+          name
+          username
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version

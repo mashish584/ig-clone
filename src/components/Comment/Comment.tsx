@@ -10,6 +10,7 @@ import {DEFAULT_USER_IMAGE} from '../../config';
 interface ICommentProps {
   comment: CommentI;
   includeDetails?: boolean;
+  isNewComment?: boolean;
 }
 
 const Comment = (props: ICommentProps) => {
@@ -36,6 +37,11 @@ const Comment = (props: ICommentProps) => {
         </Text>
         {includeDetails && (
           <View style={styles.commentFooter}>
+            {props.isNewComment && (
+              <View style={styles.newContainer}>
+                <Text style={styles.newLabel}>New</Text>
+              </View>
+            )}
             <Text style={styles.footerText}>
               {dayjs(comment.createdAt).fromNow()}
             </Text>
