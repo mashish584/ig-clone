@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {launchImageLibrary} from 'react-native-image-picker';
 import {
   Camera,
   CameraPictureOptions,
@@ -11,7 +12,9 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {colors} from '../../theme';
 import {useNavigation} from '@react-navigation/native';
-import {CameraNavigationProp} from '../../types/navigation';
+import {CameraNavigationProp, UploadPostT} from '../../types/navigation';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import useMediaUpload from '../../hooks/useMediaUpload';
 
 const flashModes = [
   FlashMode.off,
@@ -27,15 +30,24 @@ const flashModeToIcon = {
   [FlashMode.torch]: 'highlight',
 };
 
+let media: UploadPostT = {
+  image: null,
+  images: null,
+  video: null,
+};
+
 const CameraScreen = () => {
   const navigation = useNavigation<CameraNavigationProp>();
 
+  const {top} = useSafeAreaInsets();
   const [hasPermissions, setHasPermissions] = useState<boolean | null>(null);
   const [cameraType, setCameraType] = useState(CameraType.back);
   const [flash, setFlash] = useState(FlashMode.off);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const cameraRef = useRef<Camera>(null);
+
+  const {openGallery: openMediaGallery} = useMediaUpload();
 
   function flipCamera() {
     setCameraType(
@@ -59,7 +71,10 @@ const CameraScreen = () => {
     };
 
     try {
-      const result = await cameraRef.current.takePictureAsync();
+      const result = await cameraRef.current.takePictureAsync(options);
+      if (result.uri) {
+        navigation.navigate('UploadPost', {...media, image: result.uri});
+      }
     } catch (error) {
       console.log(error);
     }
@@ -78,8 +93,10 @@ const CameraScreen = () => {
     setIsRecording(true);
 
     try {
-      const result = await cameraRef.current.recordAsync();
-      console.log(result);
+      const result = await cameraRef.current.recordAsync(options);
+      if (result.uri) {
+        navigation.navigate('UploadPost', {...media, video: result.uri});
+      }
     } catch (error) {
       console.log({error});
     }
@@ -93,6 +110,22 @@ const CameraScreen = () => {
       setIsRecording(false);
     }
   }
+
+  const openGallery = async () => {
+    let payload = {...media};
+    const assets = await openMediaGallery('mixed', 3);
+    console.log(assets[0]);
+    if (assets.length === 1) {
+      const key = assets[0].type;
+      payload[key] = assets[0].uri;
+    } else if (assets.length > 1) {
+      payload.images = assets.map(asset => asset.uri);
+    }
+
+    if (assets.length) {
+      navigation.navigate('UploadPost', payload);
+    }
+  };
 
   useEffect(() => {
     const getPermission = async () => {
@@ -125,8 +158,10 @@ const CameraScreen = () => {
         ratio="4:3"
         onCameraReady={() => setIsCameraReady(true)}
       />
-      <View style={[styles.buttonContainer, {top: 25}]}>
-        <MaterialIcons name="close" size={30} color={colors.white} />
+      <View style={[styles.buttonContainer, {top}]}>
+        <Pressable onPress={() => navigation.goBack()}>
+          <MaterialIcons name="close" size={30} color={colors.white} />
+        </Pressable>
         <Pressable onPress={toggleFlash}>
           <MaterialIcons
             name={flashModeToIcon[flash]}
@@ -137,7 +172,9 @@ const CameraScreen = () => {
         <MaterialIcons name="settings" size={30} color={colors.white} />
       </View>
       <View style={[styles.buttonContainer, {bottom: 25}]}>
-        <MaterialIcons name="photo-library" size={30} color={colors.white} />
+        <Pressable onPress={openGallery}>
+          <MaterialIcons name="photo-library" size={30} color={colors.white} />
+        </Pressable>
         {isCameraReady && (
           <Pressable
             onLongPress={startRecording}
@@ -158,20 +195,13 @@ const CameraScreen = () => {
             color={colors.white}
           />
         </Pressable>
-        <Pressable
-          onPress={() =>
-            navigation.navigate('UploadPost', {
-              image: 'https://unsplash.it/1000/1000',
-              images: null,
-              video: null,
-            })
-          }>
+        {/* <Pressable>
           <MaterialIcons
             name="arrow-forward-ios"
             size={30}
             color={colors.white}
           />
-        </Pressable>
+        </Pressable> */}
       </View>
     </View>
   );

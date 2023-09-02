@@ -7,9 +7,21 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   avatar: {
-    width: '30%',
+    width: 100,
     aspectRatio: 1,
     borderRadius: 100,
+    overflow: 'hidden',
+  },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: colors.white,
+    opacity: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
   },
   textButton: {
     color: colors.primary,

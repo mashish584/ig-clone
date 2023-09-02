@@ -41,7 +41,7 @@ type Post
       queryField: "postsByDate"
       sortKeyFields: ["createdAt"]
     )
-  userID: ID! @index(name: "byUser")
+  userID: ID! @index(name: "byUser", sortKeyFields: ["createdAt"])
   User: User @belongsTo(fields: ["userID"])
   Comments: [Comment] @hasMany(indexName: "byPost", fields: ["id"])
   Likes: [Like] @hasMany(indexName: "byPost", fields: ["id"])

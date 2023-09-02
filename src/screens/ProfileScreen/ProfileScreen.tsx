@@ -11,8 +11,14 @@ import {
 
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useQuery} from '@apollo/client';
-import {getUser} from './queries';
-import {GetUserQuery, GetUserQueryVariables} from '../../API';
+import {getUser, postsByUserIDAndCreatedAt} from './queries';
+import {
+  GetUserQuery,
+  GetUserQueryVariables,
+  ModelSortDirection,
+  PostsByUserIDAndCreatedAtQuery,
+  PostsByUserIDAndCreatedAtQueryVariables,
+} from '../../API';
 import {ActivityIndicator} from 'react-native';
 import ApiErrorMessage from '../../components/ApiErrorMessage/ApiErrorMessage';
 import {useAuthContext} from '../../contexts/AuthContext';
@@ -25,14 +31,26 @@ const ProfileScreen = () => {
   >();
 
   const userId = route.params?.userId || authUserId;
-  const {data, loading, error, refetch} = useQuery<
-    GetUserQuery,
-    GetUserQueryVariables
-  >(getUser, {
-    variables: {id: userId},
+  const {data, loading, error} = useQuery<GetUserQuery, GetUserQueryVariables>(
+    getUser,
+    {
+      variables: {id: userId},
+    },
+  );
+
+  const {
+    data: userPostsData,
+    loading: isPostsLoading,
+    refetch,
+  } = useQuery<
+    PostsByUserIDAndCreatedAtQuery,
+    PostsByUserIDAndCreatedAtQueryVariables
+  >(postsByUserIDAndCreatedAt, {
+    variables: {userID: userId, sortDirection: ModelSortDirection.DESC},
   });
 
   const user = data?.getUser;
+  const userPosts = userPostsData?.postsByUserIDAndCreatedAt?.items;
 
   if (loading) {
     return <ActivityIndicator />;
@@ -50,10 +68,10 @@ const ProfileScreen = () => {
 
   return (
     <FeedGridView
-      data={user?.Posts?.items || []}
+      data={userPosts || []}
       ListHeaderComponent={() => <ProfileHeader user={user} />}
       refetch={refetch}
-      loading={loading}
+      loading={isPostsLoading}
     />
   );
 };

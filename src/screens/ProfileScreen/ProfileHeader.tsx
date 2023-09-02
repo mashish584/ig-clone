@@ -9,6 +9,7 @@ import styles from './styles';
 import {User} from '../../API';
 import {DEFAULT_USER_IMAGE} from '../../config';
 import {useAuthContext} from '../../contexts/AuthContext';
+import ProfileAvatar from '../../components/ProfileAvatar';
 
 interface ProfileHeaderI {
   user: User;
@@ -22,10 +23,7 @@ const ProfileHeader = ({user}: ProfileHeaderI) => {
     <View style={styles.root}>
       <View style={styles.headerRow}>
         {/* Profile Image */}
-        <Image
-          source={{uri: user.image || DEFAULT_USER_IMAGE}}
-          style={styles.avatar}
-        />
+        <ProfileAvatar image={user.image} />
         {/* Posts,Followers,Following */}
         <View style={styles.numberContainer}>
           <Text style={styles.numberText}>{user?.nofPosts}</Text>

@@ -29,13 +29,15 @@ export type ProfileStackNavigatorParamList = {
   EditProfile: undefined;
 };
 
+export type UploadPostT = {
+  image: string | null;
+  images: string[] | null;
+  video: string | null;
+};
+
 export type PostUploadNavigatorParamList = {
   Camera: undefined;
-  UploadPost: {
-    image: string | null;
-    images: string[] | null;
-    video: string | null;
-  };
+  UploadPost: UploadPostT;
 };
 
 export type AuthStackNavigatorParamList = {

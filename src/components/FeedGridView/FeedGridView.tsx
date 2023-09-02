@@ -3,7 +3,7 @@ import {FlatList, FlatListProps, Image} from 'react-native';
 import FeedGridItem from './FeedGridItem';
 import {Post as PostType} from '../../API';
 
-type Post = Pick<PostType, 'id' | 'image' | 'images' | 'description'>;
+type Post = Pick<PostType, 'id' | 'image' | 'images' | 'video'>;
 
 interface IFeedGridView<T>
   extends Pick<FlatListProps<T>, 'ListHeaderComponent'> {
@@ -23,7 +23,13 @@ const FeedGridView = ({
       data={data}
       renderItem={({item}) => {
         return (
-          <FeedGridItem data={{image: item?.image, images: item?.images}} />
+          <FeedGridItem
+            data={{
+              image: item?.image,
+              images: item?.images,
+              video: item?.video,
+            }}
+          />
         );
       }}
       showsVerticalScrollIndicator={false}

@@ -4,7 +4,9 @@ import styles from './styles';
 import {colors} from '../../theme';
 import {User} from '../../API';
 
-export type IEditableUser = Pick<User, 'name' | 'username' | 'website' | 'bio'>;
+export type IEditableUser = Partial<
+  Pick<User, 'name' | 'username' | 'website' | 'bio' | 'image'>
+>;
 
 interface ICustomInput {
   label: string;

@@ -7,20 +7,24 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import DoublePress from '../DoublePressable';
 import Dot from './Dot';
 
+const IMAGE_WIDTH = Dimensions.get('screen').width;
+
 interface ICarousel {
   images: string[];
+  spacing?: number;
   onDoublePress?: () => void;
 }
 
-const Carousel = ({images, onDoublePress}: ICarousel) => {
+const Carousel = ({images, onDoublePress, spacing = 0}: ICarousel) => {
   const {width} = useWindowDimensions();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-  const Parent = onDoublePress ? DoublePress : React.Fragment;
+  const Parent = onDoublePress ? DoublePress : View;
   let parentProps: Pick<ICarousel, 'onDoublePress'> = {};
 
   if (onDoublePress) {
@@ -31,12 +35,15 @@ const Carousel = ({images, onDoublePress}: ICarousel) => {
     event: NativeSyntheticEvent<NativeScrollEvent>,
   ) {
     const {x} = event.nativeEvent.contentOffset;
-    const slide = Math.floor(x / width);
+    const slide = Math.floor((x + spacing * 2) / width);
+
     setActiveImageIndex(slide);
   }
 
+  const imageContainerWidth = spacing ? IMAGE_WIDTH - spacing * 2 : IMAGE_WIDTH;
+
   return (
-    <View>
+    <>
       <FlatList
         data={images}
         horizontal={true}
@@ -44,7 +51,13 @@ const Carousel = ({images, onDoublePress}: ICarousel) => {
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={handleMomentumScrollEnd}
         renderItem={({item}) => (
-          <Parent {...parentProps}>
+          <Parent
+            {...parentProps}
+            onStartShouldSetResponder={() => true}
+            style={{
+              width: imageContainerWidth,
+              aspectRatio: 1,
+            }}>
             <Image
               source={{
                 uri: item,
@@ -59,7 +72,7 @@ const Carousel = ({images, onDoublePress}: ICarousel) => {
           <Dot key={`dot_${index}`} isActive={index === activeImageIndex} />
         ))}
       </View>
-    </View>
+    </>
   );
 };
 

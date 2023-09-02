@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import styles, {colors} from './styles';
 import {Comment as CommentI} from '../../API';
 import {DEFAULT_USER_IMAGE} from '../../config';
+import ProfileAvatar from '../ProfileAvatar';
 
 interface ICommentProps {
   comment: CommentI;
@@ -25,9 +26,11 @@ const Comment = (props: ICommentProps) => {
   return (
     <View style={styles.comment}>
       {includeDetails && (
-        <Image
-          source={{uri: comment.User?.image || DEFAULT_USER_IMAGE}}
+        // <Image source={{uri: DEFAULT_USER_IMAGE}} style={styles.avatar} />
+        <ProfileAvatar
+          image={comment.User?.image}
           style={styles.avatar}
+          isSmallIcon={true}
         />
       )}
       <View style={styles.middleColumn}>

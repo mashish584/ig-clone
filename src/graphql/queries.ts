@@ -39,6 +39,7 @@ export const getLike = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       Post {
@@ -68,6 +69,7 @@ export const getLike = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Comments {
@@ -84,6 +86,7 @@ export const getLike = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       createdAt
@@ -91,6 +94,7 @@ export const getLike = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
       __typename
     }
   }
@@ -122,6 +126,7 @@ export const listLikes = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Post {
@@ -139,6 +144,7 @@ export const listLikes = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         createdAt
@@ -146,6 +152,7 @@ export const listLikes = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -187,6 +194,7 @@ export const syncLikes = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Post {
@@ -204,6 +212,7 @@ export const syncLikes = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         createdAt
@@ -211,6 +220,7 @@ export const syncLikes = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -254,6 +264,7 @@ export const likesByUserID = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Post {
@@ -271,6 +282,7 @@ export const likesByUserID = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         createdAt
@@ -278,6 +290,7 @@ export const likesByUserID = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -323,6 +336,7 @@ export const likesByPost = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Post {
@@ -340,6 +354,7 @@ export const likesByPost = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         createdAt
@@ -347,6 +362,7 @@ export const likesByPost = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -394,6 +410,7 @@ export const getComment = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       Post {
@@ -423,6 +440,7 @@ export const getComment = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Comments {
@@ -439,12 +457,14 @@ export const getComment = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      owner
       __typename
     }
   }
@@ -478,6 +498,7 @@ export const listComments = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Post {
@@ -495,12 +516,14 @@ export const listComments = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -544,6 +567,7 @@ export const syncComments = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Post {
@@ -561,12 +585,14 @@ export const syncComments = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -612,6 +638,7 @@ export const commentsByUserID = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Post {
@@ -629,12 +656,14 @@ export const commentsByUserID = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -682,6 +711,7 @@ export const commentsByPostIDAndCreatedAt = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Post {
@@ -699,12 +729,14 @@ export const commentsByPostIDAndCreatedAt = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -757,6 +789,7 @@ export const getPost = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       Comments {
@@ -770,6 +803,7 @@ export const getPost = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         nextToken
@@ -786,6 +820,7 @@ export const getPost = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         nextToken
@@ -796,6 +831,7 @@ export const getPost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
       __typename
     }
   }
@@ -834,6 +870,7 @@ export const listPosts = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Comments {
@@ -850,6 +887,7 @@ export const listPosts = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -898,6 +936,7 @@ export const syncPosts = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Comments {
@@ -914,6 +953,7 @@ export const syncPosts = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -966,6 +1006,7 @@ export const postsByDate = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Comments {
@@ -982,6 +1023,7 @@ export const postsByDate = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -990,16 +1032,18 @@ export const postsByDate = /* GraphQL */ `
     }
   }
 `;
-export const postsByUserID = /* GraphQL */ `
-  query PostsByUserID(
+export const postsByUserIDAndCreatedAt = /* GraphQL */ `
+  query PostsByUserIDAndCreatedAt(
     $userID: ID!
+    $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelPostFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    postsByUserID(
+    postsByUserIDAndCreatedAt(
       userID: $userID
+      createdAt: $createdAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -1032,6 +1076,7 @@ export const postsByUserID = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         Comments {
@@ -1048,6 +1093,7 @@ export const postsByUserID = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -1083,6 +1129,7 @@ export const getUser = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         nextToken
@@ -1100,6 +1147,7 @@ export const getUser = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         nextToken
@@ -1116,6 +1164,7 @@ export const getUser = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          owner
           __typename
         }
         nextToken
@@ -1129,6 +1178,7 @@ export const getUser = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
       __typename
     }
   }
@@ -1171,6 +1221,7 @@ export const listUsers = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -1223,6 +1274,7 @@ export const syncUsers = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -1277,6 +1329,7 @@ export const usersByUsername = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken

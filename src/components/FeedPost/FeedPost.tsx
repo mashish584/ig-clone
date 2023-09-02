@@ -21,6 +21,8 @@ import PostMenu from './PostMenu';
 
 import {useAuthContext} from '../../contexts/AuthContext';
 import {usePostLikeService} from '../../hooks';
+import Content from './Content';
+import ProfileAvatar from '../ProfileAvatar';
 
 interface IFeedPost {
   post: Post;
@@ -51,38 +53,14 @@ const FeedPost = (props: IFeedPost) => {
     navigation.navigate('Comments', {postId: post.id});
   }
 
-  let content = null;
-
-  if (post.image) {
-    content = (
-      <DoublePress onDoublePress={togglePostLike}>
-        <Image
-          source={{
-            uri: post.image,
-          }}
-          style={styles.image}
-        />
-      </DoublePress>
-    );
-  } else if (post.images) {
-    content = <Carousel images={post.images} onDoublePress={togglePostLike} />;
-  } else if (post.video) {
-    content = (
-      <DoublePress onDoublePress={togglePostLike}>
-        <VideoPlayer uri={post.video} paused={!isVisible} />
-      </DoublePress>
-    );
-  }
-
   return (
     <View style={styles.post}>
       {/* Post Header */}
       <View style={styles.header}>
-        <Image
-          source={{
-            uri: post.User?.image || DEFAULT_USER_IMAGE,
-          }}
+        <ProfileAvatar
+          image={post.User?.image}
           style={styles.userAvatar}
+          isSmallIcon={true}
         />
         <Text onPress={showUserProfile} style={styles.userName}>
           {post.User?.username}
@@ -93,7 +71,9 @@ const FeedPost = (props: IFeedPost) => {
         />
       </View>
       {/* Content */}
-      {content}
+      <DoublePress onDoublePress={togglePostLike}>
+        <Content post={post} isVisible={isVisible} spacing={0} />
+      </DoublePress>
 
       {/* Footer */}
       <View style={styles.footer}>

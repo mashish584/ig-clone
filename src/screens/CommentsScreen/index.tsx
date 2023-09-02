@@ -4,7 +4,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Comment from '../../components/Comment';
 import Input from './Input';
 import {useRoute} from '@react-navigation/native';
-import {useCommentService, onNewComment} from '../../hooks/Comments';
+import {useCommentService, onNewComment} from '../../hooks';
 import ApiErrorMessage from '../../components/ApiErrorMessage/ApiErrorMessage';
 import {CommentRouteProp} from '../../types/navigation';
 import {useSubscription} from '@apollo/client';

@@ -23,16 +23,20 @@ import {Auth} from 'aws-amplify';
 import CustomInput, {IEditableUser} from './CustomInput';
 import styles from './styles';
 import {DEFAULT_USER_IMAGE} from '../../config';
+import {useMediaUpload} from '../../hooks';
+import {colors} from '../../theme';
+import ProfileAvatar from '../../components/ProfileAvatar';
 
 const URL_REGEX =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 
 const EditProfileScreen = () => {
-  const [selectedPhoto, setSelectedPhoto] = useState<null | Asset>(null);
   const {control, handleSubmit, setValue} = useForm<IEditableUser>();
   const navigation = useNavigation();
 
   const {userId, user: authUser} = useAuthContext();
+  const {uploadMedia, openGallery, isMediaUploading, getUploadMediaUrls} =
+    useMediaUpload();
 
   const [getUserByUsername] = useLazyQuery<
     UsersByUsernameQuery,
@@ -59,7 +63,10 @@ const EditProfileScreen = () => {
     }
   }, [user]);
 
-  async function onSubmit(formData: IEditableUser) {
+  const onSubmit = async (
+    formData: IEditableUser,
+    allowBackNavigation = true,
+  ) => {
     await doUpdateuser({
       variables: {
         input: {
@@ -70,10 +77,10 @@ const EditProfileScreen = () => {
       },
     });
 
-    if (navigation.canGoBack()) {
+    if (navigation.canGoBack() && allowBackNavigation) {
       navigation.goBack();
     }
-  }
+  };
 
   const validateUsername = async (username: string) => {
     try {
@@ -82,7 +89,6 @@ const EditProfileScreen = () => {
         return 'Failed to fetch username';
       }
       const users = response.data?.usersByUsername?.items;
-      console.log({users});
       if (users?.length && username !== user?.username) {
         return 'Username already taken.';
       }
@@ -122,16 +128,15 @@ const EditProfileScreen = () => {
     ]);
   }
 
-  function onChangePhoto() {
-    launchImageLibrary(
-      {mediaType: 'photo'},
-      ({didCancel, errorCode, errorMessage, assets}) => {
-        if (!didCancel && !errorCode && assets?.length) {
-          setSelectedPhoto(assets[0]);
-        }
-      },
-    );
-  }
+  const onChangePhoto = async () => {
+    const assets = await openGallery('photo', 1);
+    if (assets?.length) {
+      const imageKey = await uploadMedia(assets[0].uri, userId);
+      if (imageKey) {
+        await onSubmit({image: imageKey}, false);
+      }
+    }
+  };
 
   if (loading) {
     return <ActivityIndicator />;
@@ -146,10 +151,9 @@ const EditProfileScreen = () => {
 
   return (
     <View style={styles.page}>
-      <Image
-        source={{uri: selectedPhoto?.uri || user?.image || DEFAULT_USER_IMAGE}}
-        style={styles.avatar}
-      />
+      <View style={styles.avatar}>
+        <ProfileAvatar image={user?.image} isLoading={isMediaUploading} />
+      </View>
       <Text onPress={onChangePhoto} style={styles.textButton}>
         Change Profile Photo
       </Text>
