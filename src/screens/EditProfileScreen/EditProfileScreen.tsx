@@ -82,6 +82,7 @@ const EditProfileScreen = () => {
         return 'Failed to fetch username';
       }
       const users = response.data?.usersByUsername?.items;
+      console.log({users});
       if (users?.length && username !== user?.username) {
         return 'Username already taken.';
       }

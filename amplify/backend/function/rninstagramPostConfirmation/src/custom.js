@@ -31,7 +31,6 @@ const saveUser = async user => {
 
     const Item = {
       ...user,
-      username: user.email,
       nofPosts: 0,
       nofFollowers: 0,
       nofFollowings: 0,
@@ -63,6 +62,7 @@ exports.handler = async (event, context) => {
 
   const newUser = {
     id: userAttributes.sub,
+    owner: userAttributes.sub,
     name: userAttributes.name,
     email: userAttributes.email,
   };
