@@ -34,13 +34,7 @@ const typePolicies: TypePolicies = {
     fields: {
       commentsByPostIDAndCreatedAt: {
         keyArgs: ['postID', 'createdAt', 'sortDirection', 'filter'],
-        merge: (existing = {}, incoming) => {
-          return {
-            ...existing,
-            ...incoming,
-            items: [...(existing.items || []), ...incoming.items],
-          };
-        },
+        merge,
       },
       postsByDate: {
         keyArgs: ['type', 'createdAt', 'sortDirection', 'filter'],
