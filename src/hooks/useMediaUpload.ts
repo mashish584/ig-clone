@@ -16,6 +16,7 @@ type Media = {
 };
 
 const useMediaUpload = () => {
+  const [progress, setProgress] = useState<number[]>([]);
   const [isMediaUploading, setIsMediaUploading] = useState(false);
 
   const openGallery = useCallback(
@@ -50,7 +51,12 @@ const useMediaUpload = () => {
   );
 
   const uploadMedia = useCallback(
-    async (uri: string, userId: string, isMultipleUpload = false) => {
+    async (
+      uri: string,
+      userId: string,
+      index: number,
+      isMultipleUpload = false,
+    ) => {
       try {
         if (!isMultipleUpload) {
           setIsMediaUploading(true);
@@ -60,7 +66,16 @@ const useMediaUpload = () => {
         const extension = uri?.split('.').pop();
         const fileId = generateRandomID(25);
         const fileName = `post-${userId}-${fileId}.${extension}`;
-        const s3Response = await Storage.put(fileName, blob);
+        const s3Response = await Storage.put(fileName, blob, {
+          progressCallback: progress => {
+            const uploadProgress = progress.loaded / progress.total;
+            setProgress(prev => {
+              const progress = [...prev];
+              progress[index] = Math.floor(uploadProgress * 100);
+              return progress;
+            });
+          },
+        });
         if (!isMultipleUpload) {
           setIsMediaUploading(false);
         }
@@ -80,8 +95,9 @@ const useMediaUpload = () => {
       try {
         let mediaKeys = [];
         setIsMediaUploading(true);
+        setProgress(new Array(medias.length).fill(0));
         for (let i = 0; i < medias.length; i++) {
-          const mediaKey = await uploadMedia(medias[i], userId, true);
+          const mediaKey = await uploadMedia(medias[i], userId, i, true);
           if (mediaKey) {
             mediaKeys.push(mediaKey);
           }
@@ -118,6 +134,7 @@ const useMediaUpload = () => {
     uploadMultipleMedias,
     getUploadMediaUrls,
     isMediaUploading,
+    progress,
   };
 };
 

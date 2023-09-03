@@ -1,4 +1,4 @@
-import {Alert, Image, StyleSheet, TextInput, View} from 'react-native';
+import {Alert, Image, StyleSheet, Text, TextInput, View} from 'react-native';
 import {colors} from '../../theme';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {
@@ -16,6 +16,7 @@ import {CreatePostMutation, CreatePostMutationVariables} from '../../API';
 import {useAuthContext} from '../../contexts/AuthContext';
 import {useMediaUpload} from '../../hooks';
 import Content from '../../components/FeedPost/Content';
+import Progress from '../../components/Progress';
 
 const CreatePostScreen = () => {
   const navigation = useNavigation<UploadNavigationProp>();
@@ -26,7 +27,7 @@ const CreatePostScreen = () => {
   const [description, setDescription] = useState('');
 
   const {userId} = useAuthContext();
-  const {uploadMultipleMedias} = useMediaUpload();
+  const {uploadMultipleMedias, progress} = useMediaUpload();
   const [uploadPost] = useMutation<
     CreatePostMutation,
     CreatePostMutationVariables
@@ -101,6 +102,7 @@ const CreatePostScreen = () => {
           style={styles.descriptionInput}
         />
       </View>
+      <Progress progress={progress} />
       <Button
         text={isPostUploading ? 'Wait...' : 'Create Post'}
         disabled={description?.length < 1 || isPostUploading}
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
   },
   descriptionContainer: {
     borderWidth: 0.5,
-    borderColor: '#DCDCDC',
+    borderColor: colors.lightGray,
     paddingVertical: 10,
     marginBottom: 10,
   },
