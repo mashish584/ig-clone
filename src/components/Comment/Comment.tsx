@@ -1,12 +1,17 @@
 import React, {useState} from 'react';
 import {View, Text, Image, Pressable} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {IComment} from '../../types/model';
+import dayjs from 'dayjs';
+
 import styles, {colors} from './styles';
+import {Comment as CommentI} from '../../API';
+import {DEFAULT_USER_IMAGE} from '../../config';
+import ProfileAvatar from '../ProfileAvatar';
 
 interface ICommentProps {
-  comment: IComment;
+  comment: CommentI;
   includeDetails?: boolean;
+  isNewComment?: boolean;
 }
 
 const Comment = (props: ICommentProps) => {
@@ -21,17 +26,29 @@ const Comment = (props: ICommentProps) => {
   return (
     <View style={styles.comment}>
       {includeDetails && (
-        <Image source={{uri: comment.user.image}} style={styles.avatar} />
+        // <Image source={{uri: DEFAULT_USER_IMAGE}} style={styles.avatar} />
+        <ProfileAvatar
+          image={comment.User?.image}
+          style={styles.avatar}
+          isSmallIcon={true}
+        />
       )}
       <View style={styles.middleColumn}>
         <Text style={styles.commentText}>
-          <Text style={styles.bold}>{comment.user.username}</Text>{' '}
+          <Text style={styles.bold}>{comment.User?.username}</Text>{' '}
           {comment.comment}
         </Text>
         {includeDetails && (
           <View style={styles.commentFooter}>
-            <Text style={styles.footerText}>3d</Text>
-            <Text style={styles.footerText}>5 likes</Text>
+            {props.isNewComment && (
+              <View style={styles.newContainer}>
+                <Text style={styles.newLabel}>New</Text>
+              </View>
+            )}
+            <Text style={styles.footerText}>
+              {dayjs(comment.createdAt).fromNow()}
+            </Text>
+            <Text style={styles.footerText}>0 likes</Text>
             <Text style={styles.footerText}>Reply</Text>
           </View>
         )}

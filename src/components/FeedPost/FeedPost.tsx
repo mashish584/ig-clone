@@ -1,10 +1,11 @@
 import {useState} from 'react';
 import {Image, Pressable, Text, View} from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
+
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import dayjs from 'dayjs';
 
 import styles, {colors} from './styles';
 
@@ -13,91 +14,76 @@ import VideoPlayer from '../VideoPlayer/VideoPlayer';
 import DoublePress from '../DoublePressable';
 import Carousel from '../Carousel';
 
-import {IPost} from '../../types/model';
-import {FeedNavigationProp} from '../../navigation/types';
+import {FeedNavigationProp} from '../../types/navigation';
+import {Post} from '../../API';
+import {DEFAULT_USER_IMAGE} from '../../config';
+import PostMenu from './PostMenu';
+
+import {useAuthContext} from '../../contexts/AuthContext';
+import {usePostLikeService} from '../../hooks';
+import Content from './Content';
+import ProfileAvatar from '../ProfileAvatar';
 
 interface IFeedPost {
-  post: IPost;
+  post: Post;
   isVisible: boolean;
+  onPostUpdate: () => void;
 }
 
 const FeedPost = (props: IFeedPost) => {
+  const {userId} = useAuthContext();
   const navigation = useNavigation<FeedNavigationProp>();
   const {post, isVisible} = props;
+  const {togglePostLike, isUserLiked, firstLikeUser, postLikes} =
+    usePostLikeService(post, userId);
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [isPostLiked, setIsPostLiked] = useState(false);
 
   function toogleDescriptionExpanded() {
     setIsDescriptionExpanded(!isDescriptionExpanded);
   }
 
-  function togglePostLike() {
-    setIsPostLiked(!isPostLiked);
-  }
-
   function showUserProfile() {
-    navigation.navigate('UserProfile', {userId: post.user.id});
+    if (post?.User) {
+      navigation.navigate('UserProfile', {userId: post.User?.id});
+    }
   }
 
   function navigateToComments() {
     navigation.navigate('Comments', {postId: post.id});
   }
 
-  let content = null;
-
-  if (post.image) {
-    content = (
-      <DoublePress onDoublePress={togglePostLike}>
-        <Image
-          source={{
-            uri: post.image,
-          }}
-          style={styles.image}
-        />
-      </DoublePress>
-    );
-  } else if (post.images) {
-    content = <Carousel images={post.images} onDoublePress={togglePostLike} />;
-  } else if (post.video) {
-    content = (
-      <DoublePress onDoublePress={togglePostLike}>
-        <VideoPlayer uri={post.video} paused={!isVisible} />
-      </DoublePress>
-    );
-  }
-
   return (
     <View style={styles.post}>
       {/* Post Header */}
       <View style={styles.header}>
-        <Image
-          source={{
-            uri: post.user.image,
-          }}
+        <ProfileAvatar
+          image={post.User?.image}
           style={styles.userAvatar}
+          isSmallIcon={true}
         />
         <Text onPress={showUserProfile} style={styles.userName}>
-          {post.user.username}
+          {post.User?.username}
         </Text>
-        <Entypo
-          name="dots-three-horizontal"
-          size={16}
-          style={styles.threeDots}
+        <PostMenu
+          post={{id: post.id, userID: post.userID, _version: post._version}}
+          onDeleteCallback={props.onPostUpdate}
         />
       </View>
       {/* Content */}
-      {content}
+      <DoublePress onDoublePress={togglePostLike}>
+        <Content post={post} isVisible={isVisible} spacing={0} />
+      </DoublePress>
 
       {/* Footer */}
       <View style={styles.footer}>
         <View style={styles.iconContainer}>
           <Pressable onPress={togglePostLike}>
             <AntDesign
-              name={isPostLiked ? 'heart' : 'hearto'}
+              name={isUserLiked ? 'heart' : 'hearto'}
               size={24}
               style={styles.icon}
-              color={isPostLiked ? colors.accent : colors.black}
+              color={isUserLiked ? colors.accent : colors.black}
             />
           </Pressable>
           <Ionicons
@@ -121,26 +107,59 @@ const FeedPost = (props: IFeedPost) => {
         </View>
         {/* Post likes */}
         <Text>
-          Liked by <Text style={styles.bold}>abc</Text> &{' '}
-          <Text style={styles.bold}>{post.nofLikes} others</Text>
+          {postLikes?.length === 0 ? (
+            <Text>Be the first to like this post.</Text>
+          ) : (
+            <>
+              Liked by{' '}
+              <Text
+                onPress={() => {
+                  const isNavigationAllowed =
+                    !isUserLiked &&
+                    firstLikeUser &&
+                    firstLikeUser?.id !== userId;
+                  if (isNavigationAllowed) {
+                    navigation.navigate('UserProfile', {
+                      userId: firstLikeUser?.id,
+                    });
+                  }
+                }}
+                style={styles.bold}>
+                {firstLikeUser?.id === userId ? 'you' : firstLikeUser?.username}
+              </Text>
+              {postLikes?.length > 1 && (
+                <Text
+                  onPress={() =>
+                    navigation.navigate('PostLikes', {id: post.id})
+                  }
+                  style={styles.bold}>
+                  {' '}
+                  & {post.nofLikes} others
+                </Text>
+              )}
+            </>
+          )}
         </Text>
         {/* Post Description */}
         <Text style={styles.text} numberOfLines={isDescriptionExpanded ? 0 : 3}>
-          <Text style={styles.bold}>{post.user.username}</Text>{' '}
+          <Text style={styles.bold}>{post.User?.username}</Text>{' '}
           {post.description}
         </Text>
         <Text onPress={toogleDescriptionExpanded}>
           Show {isDescriptionExpanded ? 'less' : 'more'}
         </Text>
         {/* Post comments */}
+
         <Text onPress={navigateToComments}>
-          View all {post.nofComments} comments
+          View all {post.nofComments}{' '}
+          {post.nofComments > 1 ? 'comments' : 'comment'}
         </Text>
-        {post.comments.map(comment => {
-          return <Comment key={comment.id} comment={comment} />;
+
+        {(post.Comments?.items || []).map(comment => {
+          return comment && <Comment key={comment.id} comment={comment} />;
         })}
         {/* Posted date */}
-        <Text>{post.createdAt}</Text>
+        <Text>{dayjs(post.createdAt).fromNow()}</Text>
       </View>
     </View>
   );

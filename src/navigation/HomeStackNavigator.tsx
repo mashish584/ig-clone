@@ -1,9 +1,11 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Image} from 'react-native';
 
-import HomeScreen from '../screens/HomScreen';
+import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
-import {HomeStackNavigatorParamList} from './types';
+import {HomeStackNavigatorParamList} from '../types/navigation';
+import UpdatePostScreen from '../screens/UpdatePostScreen';
+import PostLikesScreen from '../screens/PostLikesScreen';
 
 const Stack = createNativeStackNavigator<HomeStackNavigatorParamList>();
 
@@ -16,6 +18,8 @@ const HomeStackNavigator = () => {
         options={{headerTitle: HeaderTitle, headerTitleAlign: 'center'}}
       />
       <Stack.Screen name="UserProfile" component={ProfileScreen} />
+      <Stack.Screen name="UpdatePost" component={UpdatePostScreen} />
+      <Stack.Screen name="PostLikes" component={PostLikesScreen} />
     </Stack.Navigator>
   );
 };

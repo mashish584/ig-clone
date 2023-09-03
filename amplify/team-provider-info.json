@@ -1,0 +1,33 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-rninstagram-staging-170549-authRole",
+      "UnauthRoleArn": "arn:aws:iam::293799087522:role/amplify-rninstagram-staging-170549-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::293799087522:role/amplify-rninstagram-staging-170549-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-rninstagram-staging-170549-deployment",
+      "UnauthRoleName": "amplify-rninstagram-staging-170549-unauthRole",
+      "StackName": "amplify-rninstagram-staging-170549",
+      "StackId": "arn:aws:cloudformation:ap-south-1:293799087522:stack/amplify-rninstagram-staging-170549/0064b500-2d69-11ee-af9f-0a586b208460",
+      "AmplifyAppId": "d17e50gio4bdq5",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-rninstagram-staging-170549-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "rninstagram": {}
+      },
+      "function": {
+        "rninstagramPostConfirmation": {
+          "deploymentBucketName": "amplify-rninstagram-staging-170549-deployment",
+          "s3Key": "amplify-builds/rninstagramPostConfirmation-6563763552335331626f-build.zip"
+        }
+      },
+      "api": {
+        "rninstagram": {}
+      },
+      "storage": {
+        "storage": {}
+      }
+    }
+  }
+}

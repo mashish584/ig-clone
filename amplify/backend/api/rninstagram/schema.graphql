@@ -1,0 +1,72 @@
+type Like
+  @model
+  @auth(rules: [{allow: private, operations: [read]}, {allow: owner}]) {
+  id: ID!
+  userID: ID! @index(name: "byUser")
+  postID: ID!
+    @index(name: "byPost", queryField: "likesByPost", sortKeyFields: ["userID"])
+
+  User: User @belongsTo(fields: ["userID"])
+  Post: Post @belongsTo(fields: ["postID"])
+}
+
+type Comment
+  @model
+  @auth(rules: [{allow: private, operations: [read]}, {allow: owner}]) {
+  id: ID!
+  comment: String!
+  createdAt: AWSDateTime!
+  userID: ID! @index(name: "byUser")
+  postID: ID! @index(name: "byPost", sortKeyFields: ["createdAt"])
+
+  User: User @belongsTo(fields: ["userID"])
+  Post: Post @belongsTo(fields: ["postID"])
+}
+
+type Post
+  @model
+  @auth(rules: [{allow: private, operations: [read]}, {allow: owner}]) {
+  id: ID!
+  description: String
+  video: String
+  image: String
+  images: [String!]
+  nofComments: Int!
+  nofLikes: Int!
+  createdAt: AWSDateTime!
+  type: String!
+    @default(value: "Post")
+    @index(
+      name: "postsByDate"
+      queryField: "postsByDate"
+      sortKeyFields: ["createdAt"]
+    )
+  userID: ID! @index(name: "byUser", sortKeyFields: ["createdAt"])
+  User: User @belongsTo(fields: ["userID"])
+  Comments: [Comment] @hasMany(indexName: "byPost", fields: ["id"])
+  Likes: [Like] @hasMany(indexName: "byPost", fields: ["id"])
+}
+
+type User
+  @model
+  @auth(rules: [{allow: private, operations: [read]}, {allow: owner}]) {
+  id: ID!
+  name: String!
+  email: String @auth(rules: [{allow: owner}])
+  bio: String
+  username: String
+    @index(name: "usersByUsername", queryField: "usersByUsername")
+  website: AWSURL
+  nofPosts: Int!
+  nofFollowers: Int!
+  Posts: [Post] @hasMany(indexName: "byUser", fields: ["id"])
+  Comments: [Comment] @hasMany(indexName: "byUser", fields: ["id"])
+  Likes: [Like] @hasMany(indexName: "byUser", fields: ["id"])
+  nofFollowings: Int!
+  image: String
+}
+
+type Subscription {
+  onNewComment(postID: ID!): Comment
+    @aws_subscribe(mutations: ["createComment"])
+}
