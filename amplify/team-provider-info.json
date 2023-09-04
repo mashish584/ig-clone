@@ -20,7 +20,40 @@
         "rninstagramPostConfirmation": {
           "deploymentBucketName": "amplify-rninstagram-staging-170549-deployment",
           "s3Key": "amplify-builds/rninstagramPostConfirmation-6563763552335331626f-build.zip"
-        }
+        },
+        "rninstagram": {}
+      },
+      "api": {
+        "rninstagram": {}
+      },
+      "storage": {
+        "storage": {}
+      }
+    }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-rninstagram-dev-223848-authRole",
+      "UnauthRoleArn": "arn:aws:iam::293799087522:role/amplify-rninstagram-dev-223848-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::293799087522:role/amplify-rninstagram-dev-223848-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-rninstagram-dev-223848-deployment",
+      "UnauthRoleName": "amplify-rninstagram-dev-223848-unauthRole",
+      "StackName": "amplify-rninstagram-dev-223848",
+      "StackId": "arn:aws:cloudformation:ap-south-1:293799087522:stack/amplify-rninstagram-dev-223848/ba8418f0-4b45-11ee-a21a-0ab570071488",
+      "AmplifyAppId": "d17e50gio4bdq5",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-rninstagram-dev-223848-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "rninstagram": {}
+      },
+      "function": {
+        "rninstagramPostConfirmation": {
+          "deploymentBucketName": "amplify-rninstagram-dev-223848-deployment",
+          "s3Key": "amplify-builds/rninstagramPostConfirmation-6563763552335331626f-build.zip"
+        },
+        "rninstagram": {}
       },
       "api": {
         "rninstagram": {}
