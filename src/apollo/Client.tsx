@@ -21,11 +21,18 @@ const region = config.aws_appsync_region;
 
 const httpLink = createHttpLink({uri: url});
 
-const merge = (existing = {items: []}, incoming = {items: []}) => {
+type ListItemParam = {
+  items?: any[];
+};
+
+export const merge = (
+  existing: ListItemParam = {items: []},
+  incoming: ListItemParam = {items: []},
+) => {
   return {
     ...existing,
     ...incoming,
-    items: [...(existing.items || []), ...incoming.items],
+    items: [...(existing.items || []), ...(incoming.items || [])],
   };
 };
 
