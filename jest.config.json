@@ -1,0 +1,9 @@
+{
+  "preset": "jest-expo",
+  "modulePathIgnorePatterns": ["<rootDir>/amplify/#current-cloud-backend/"],
+  "transformIgnorePatterns": [
+    "node_modules/(?!(jest-)?react-native|@react-navigation|aws-amplify-react-native|expo-camera|expo-modules-core|@react-native-firebase|@react-native|aws-amplify-react-native|react-(native|universal|navigation)-(.*)|@react-native-community/(.*)|@react-navigation/(.*)|bs-platform|(@[a-zA-Z]+/)?(bs|reason|rescript)-(.*)+)"
+  ],
+  "setupFiles": ["<rootDir>/jest.setup.js"],
+  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
+}
